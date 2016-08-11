@@ -1,0 +1,26 @@
+<ion-view view-title="Login">
+  <ion-content class="padding">
+    <div class="list card">
+      <div class="item item-body">
+        <div>
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                  <span class="input-label">First Name</span>
+                  <input type="text" placeholder="John" ng-model="data.username">
+                </label>
+                <label class="item item-input item-stacked-label">
+                  <span class="input-label">Email</span>
+                  <input type="text" placeholder="john@suhr.com" ng-model="data.password">
+                </label>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="button button-block button-positive" ng-click="login()">
+        Login Facebook
+    </button>
+
+
+  </ion-content>
+</ion-view>
