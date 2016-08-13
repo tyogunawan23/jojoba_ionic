@@ -1,20 +1,21 @@
-var controllerModule = angular.module('blank.controllers', []);
+var controllerModule = angular.module('blank.controllers', ['ionic','blank.controllers', 'ngCordovaOauth']);
 
-controllerModule.controller("navigateLogin", function($scope, LoginService, $ionicPopup, $state){
+controllerModule.controller("navigateLogin", function($scope,  $cordovaOauth, $http){
   $scope.data = {};
-
-    $scope.login = function() {
-        LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
-            $state.go('religion');
-        }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Login failed!',
-                template: 'Please check your credentials!'
-            });
+  $scope.login = function() {
+        $cordovaOauth.facebook("100235250427366", ["email", "public_profile" ]).then(function(result) {
+          displayData($http, result.access_token);
+        }, function(error) {
+          console.log(JSON.stringify(error));
+             alert (result);
         });
-    }
+}
 
+  $scope.getStatus = function() {
+
+    }
 });
+
 
 controllerModule.controller("navigateReligion", function($scope){
 
@@ -51,3 +52,26 @@ controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Cha
 controllerModule.controller("navigateSettingController", function($scope){
 
 });
+
+
+function facebookLogin($cordovaOauth, $http)
+{
+    $cordovaOauth.facebook("100235250427366", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
+        displayData($http, result.access_token);
+    },  function(error){
+            alert("Error: " + error);
+    });
+}
+
+function displayData($http, access_token)
+ {
+    $http.get("https://graph.facebook.com/v2.2/me", {params: {access_token: access_token, fields: "name,gender,location,picture", format: "json" }}).then(function(result) {
+        var nama = result.data.name;
+        var gen = result.data.gender;
+        var pic = result.data.picture;
+
+        alert("pic : "  + pic.data.url);
+    }, function(error) {
+        alert("Error: ");
+    });
+}
