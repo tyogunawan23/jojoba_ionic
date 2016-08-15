@@ -1,22 +1,24 @@
 <ion-view view-title="Religion Partner">
 
-
   <ion-content class="padding">
 
       <h3 class="padding">Choose your religion partner<h3>
 
     <ion-list>
-    <ion-radio ng-model="choice" ng-value="'A'">Islam</ion-radio>
-    <ion-radio ng-model="choice" ng-value="'B'">Hindu</ion-radio>
-    <ion-radio ng-model="choice" ng-value="'C'">Budha</ion-radio>
-    <ion-radio ng-model="choice" ng-value="'D'">Kristen</ion-radio>
 
+      <ion-radio ng-model="religion.partner" ng-value="'Islam'">Islam</ion-radio>
+      <ion-radio ng-model="religion.partner" ng-value="'Kristen'">Kristen</ion-radio>
+      <ion-radio ng-model="religion.partner" ng-value="'Hindu'">Hindu</ion-radio>
+      <ion-radio ng-model="religion.partner" ng-value="'Budha'">Budha</ion-radio>
+      <ion-radio ng-model="religion.partner" ng-value="'Lainnya'">Lainnya</ion-radio>
 
-  </ion-list>
-    <button class="button button-block button-positive" ui-sref="app.home">
+    </ion-list>
+
+    <button class="button button-block button-positive" ng-disabled="!religion.partner" ng-click="submitAnswer(religion)">
         Next
     </button>
 
 
   </ion-content>
+
 </ion-view>

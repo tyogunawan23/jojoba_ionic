@@ -6,26 +6,27 @@ controllerModule.controller("navigateLogin", function($scope,  $cordovaOauth, $h
         $cordovaOauth.facebook("100235250427366", ["email", "public_profile" ]).then(function(result) {
          //displayData($http, result.access_token);
          $localStorage.accessToken = result.access_token;
-           $location.path("/profile");
           $state.go('religion');
         }, function(error) {
           console.log(JSON.stringify(error));
              alert (result);
         });
 }
-
-  $scope.getStatus = function() {
-
-    }
 });
 
-
-controllerModule.controller("navigateReligion", function($scope){
+controllerModule.controller("navigateReligion", function($scope, $state){
+    $scope.submitAnswer = function(religion){
+      alert(religion.me);
+     $state.go('religionpartner');
+   }
 
 });
 
-controllerModule.controller("navigateReligionPartner", function($scope){
-
+controllerModule.controller("navigateReligionPartner", function($scope, $state){
+  $scope.submitAnswer = function(religion){
+    alert(religion.partner);
+    $state.go('app.home');
+  }
 });
 
 controllerModule.controller("AppCtrl", function($scope){
@@ -40,22 +41,7 @@ controllerModule.controller("navigateMatchController", function($scope){
 
 });
 
-controllerModule.controller("navigateProfilController", function($scope, $http, $localStorage, $location){
-  $scope.init = function() {
-       if($localStorage.hasOwnProperty("accessToken") === true) {
-           $http.get("https://graph.facebook.com/v2.2/me", { params: { access_token: $localStorage.accessToken, fields: "id,name,gender,location,website,picture,relationship_status", format: "json" }}).then(function(result) {
-               $scope.profileData = result.data;
-           }, function(error) {
-               alert("There was a problem getting your profile.  Check the logs for details.");
-               console.log(error);
-           });
-       } else {
-           alert("Not signed in");
-           $location.path("/login");
-       }
-   };
 
-});
 
 controllerModule.controller("navigateChatController", function($scope, Chats){
   $scope.chats = Chats.all();
