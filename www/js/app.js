@@ -71,6 +71,18 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     })
 
 
+    .state('app.profil', {
+        url: '/profil',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/profil.html',
+            controller:"navigateProfilController"
+          }
+        }
+      })
+
+
+
     .state('app.match', {
       url: '/match',
       views: {

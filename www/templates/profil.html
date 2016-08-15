@@ -1,0 +1,14 @@
+<ion-view title="Profile" ng-init="init()">
+    <ion-content>
+        <div class="list card">
+          <div class="item">
+              <h2>{{profileData.name}}</h2>
+              <p>{{profileData.location.name}}</p>
+          </div>
+          <div class="item item-image">
+              <img ng-src="https://graph.facebook.com/{{ profileData.id }}/picture?width=400&height=400" />
+          </div>
+
+        </div>
+    </ion-content>
+</ion-view>
