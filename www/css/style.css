@@ -1,4 +1,7 @@
 /* Empty. Add your own CSS if you like */
+.pane{
+  background-color:#f3f3f3;
+}
 
 .swipe-cards {
   position: fixed;
@@ -16,6 +19,18 @@
     margin-bottom: 4px;
 }
 
+
+#content-home {
+  background-color: #f3f3f3;
+  margin-top: 20px;
+}
+
+
+.swipe-cards {
+ position: fixed;
+   margin-top: 20px;
+}
+
 swipe-card {
   display: none;
   position: fixed;
@@ -31,6 +46,7 @@ swipe-card {
   border-radius: 4px;
   overflow: hidden;
   -webkit-animation-fill-mode: forwards;
+    margin-top: 20px;
 }
 
 swipe-card .title {
@@ -58,6 +74,7 @@ swipe-card .image img {
   word-wrap: break-word;
   border: 6px solid #4CD68E;
   text-align: center;
+    margin-top: 20px;
 }
 #start-card span {
   display: inline-block;
@@ -65,6 +82,7 @@ swipe-card .image img {
   width: 200px;
   font-size: 30px;
   vertical-align: middle;
+    margin-top: 20px;
 }
 
 @-webkit-keyframes bounceIn {

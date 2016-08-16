@@ -12,5 +12,4 @@ controllerModule.controller("navigateProfilController", function($scope, $http, 
            $location.path("/login");
        }
    };
-
 });

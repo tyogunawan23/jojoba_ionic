@@ -1,4 +1,4 @@
-var controllerModule = angular.module('blank.controllers', ['starter', 'ngStorage']);
+var controllerModule = angular.module('blank.controllers', ['starter', 'ngStorage', 'ionic.contrib.ui.cards']);
 
 controllerModule.controller("navigateLogin", function($scope,  $cordovaOauth, $http, $state, $localStorage, $location ){
   $scope.data = {};
@@ -16,7 +16,7 @@ controllerModule.controller("navigateLogin", function($scope,  $cordovaOauth, $h
 
 controllerModule.controller("navigateReligion", function($scope, $state){
     $scope.submitAnswer = function(religion){
-      alert(religion.me);
+    //  alert(religion.me);
      $state.go('religionpartner');
    }
 
@@ -24,7 +24,7 @@ controllerModule.controller("navigateReligion", function($scope, $state){
 
 controllerModule.controller("navigateReligionPartner", function($scope, $state){
   $scope.submitAnswer = function(religion){
-    alert(religion.partner);
+  //  alert(religion.partner);
     $state.go('app.home');
   }
 });
@@ -33,9 +33,57 @@ controllerModule.controller("AppCtrl", function($scope){
 
 });
 
-controllerModule.controller("navigateHomeController", function($scope){
+controllerModule.controller("navigateHomeController", function($scope, $http, $ionicSwipeCardDelegate){
+
+  $scope.cards = [];
+
+
+   $scope.addCard = function(img, name) {
+       var newCard = {image: img, title: name};
+       newCard.id = Math.random();
+       $scope.cards.unshift(angular.extend({}, newCard));
+   };
+
+   $scope.addCards = function(count) {
+     $http.get('http://api.randomuser.me/?results=' + count).then(function(value) {
+       angular.forEach(value.data.results, function (v) {
+         $scope.addCard(v.picture.medium, v.name.first);
+       });
+       $scope.showCards = true;
+     });
+   };
+
+   $scope.addCards(1);
+
+   $scope.cardSwiped = function(index) {
+     $scope.addCards(1);
+   };
+
+   $scope.cardDestroyed = function(index) {
+     $scope.cards.splice(index, 1);
+   };
+
+
+  $scope.cardSwipedLeft = function(index) {
+    console.log('LEFT SWIPE');
+    $scope.addCard(1);
+  };
+  $scope.cardSwipedRight = function(index) {
+    console.log('RIGHT SWIPE');
+    $scope.addCard(1);
+  };
+
 
 });
+
+
+controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate) {
+  $scope.doAnything = function() {
+    var card = $ionicSwipeCardDelegate.getSwipeableCard($scope);
+    card.swipe();
+    //  alert("tes");
+  };
+})
 
 controllerModule.controller("navigateMatchController", function($scope){
 
@@ -63,28 +111,5 @@ controllerModule.controller("navigateSettingController", function($scope){
     };
 
     $scope.rangeValue = 0;
-    
+
 });
-
-
-function facebookLogin($cordovaOauth, $http)
-{
-    $cordovaOauth.facebook("100235250427366", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
-        displayData($http, result.access_token);
-    },  function(error){
-            alert("Error: " + error);
-    });
-}
-
-function displayData($http, access_token)
- {
-    $http.get("https://graph.facebook.com/v2.2/me", {params: {access_token: access_token, fields: "name,gender,location,picture", format: "json" }}).then(function(result) {
-        var nama = result.data.name;
-        var gen = result.data.gender;
-        var pic = result.data.picture;
-
-        alert("pic : "  + pic.data.url);
-    }, function(error) {
-        alert("Error: ");
-    });
-}
