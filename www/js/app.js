@@ -41,21 +41,21 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
     .state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html',
-      controller:"navigateLogin"
+      templateUrl: 'views/login/login.html',
+      controller:"login"
     })
 
 
     .state('religion', {
       url: '/religion',
-      templateUrl: 'templates/religion.html',
+      templateUrl: 'views/religion/religion.html',
       controller:"navigateReligion"
     })
 
 
     .state('religionpartner', {
       url: '/religionpartner',
-      templateUrl: 'templates/religionpartner.html',
+      templateUrl: 'views/religion/religionpartner.html',
       controller:"navigateReligionPartner"
     })
 
@@ -64,8 +64,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/home',
       views: {
         'menuContent': {
-          templateUrl: 'templates/home.html',
-          controller:"navigateHomeController"
+          templateUrl: 'views/home/home.html',
+          controller:"home"
         }
       }
     })
@@ -75,8 +75,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         url: '/profil',
         views: {
           'menuContent': {
-            templateUrl: 'templates/profil.html',
-            controller:"navigateProfilController"
+            templateUrl: 'views/profil/profil.html',
+            controller:"profil"
           }
         }
       })
@@ -87,8 +87,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/match',
       views: {
         'menuContent': {
-          templateUrl: 'templates/match.html',
-          controller:"navigateMatchController"
+          templateUrl: 'views/match/match.html',
+          controller:"match"
         }
       }
     })
@@ -97,8 +97,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/chat',
       views: {
         'menuContent': {
-          templateUrl: 'templates/chat.html',
-          controller:"navigateChatController"
+          templateUrl: 'views/chat/chat.html',
+          controller:"chat"
         }
       }
     })
@@ -107,7 +107,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/chat/:chatId',
       views: {
         'menuContent': {
-          templateUrl: 'templates/chat-detail.html',
+          templateUrl: 'views/chat/chat-detail.html',
           controller: "ChatDetailCtrl"
         }
       }
@@ -118,8 +118,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/setting',
       views: {
         'menuContent': {
-          templateUrl: 'templates/setting.html',
-          controller:"navigateSettingController"
+          templateUrl: 'views/setting/setting.html',
+          controller:"setting"
         }
       }
     });
