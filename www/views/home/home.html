@@ -15,12 +15,16 @@
           <img ng-src="{{card.image}}">
         </div>
         <div class="button-bar">
+          <button class="button button-clear button-positive" ng-click="doAnything()">Reject</button>
           <button class="button button-clear button-positive" ng-click="doAnything()">Like</button>
-          <button class="button button-clear button-positive" ng-click="doAnything()">Disklike</button>
         </div>
       </div>
     </swipe-card>
   </swipe-cards>
 
-  </ion-content>
+  <!-- <div ng-controller="GeoCtrl"></div>
+  <button class="button button-block button-positive" ng-click="vm.where()">
+      Cek Location
+  </button>
+  </ion-content> -->
 </ion-view>

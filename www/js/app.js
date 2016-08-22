@@ -3,10 +3,21 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards']);
+var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards', 'ngCordova', 'ngStorage']);
 
-myApp.run(function($ionicPlatform) {
+myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $location) {
+
   $ionicPlatform.ready(function() {
+
+     if(localStorage.getItem("token") !== null && localStorage.getItem("token") !== ""){
+       $ionicHistory.nextViewOptions({
+          historyRoot: true
+        });
+        $state.go('app.home');
+        $window.location.reload(true);
+     }
+
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -20,6 +31,15 @@ myApp.run(function($ionicPlatform) {
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    if (window.cordova) {
+        // cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
+        //     alert("Location is " + (enabled ? "enabled" : "disabled"));
+        // }, function(error) {
+        //     alert("The following error occurred: " + error);
+        // });
+    }
+
   });
 });
 
