@@ -14,6 +14,7 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
   var rangeAge = "";
 
 
+//  alert('jajal')
   var urlParams = {
     'fbid': idFb,
     'pagination': countTotal,
@@ -24,6 +25,10 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
 };
 
   $scope.cards = [];
+
+
+  $ionicLoading.show();
+   getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
 
 
 
@@ -102,7 +107,7 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
 });
 
 
-controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate,  $cordovaDialogs, $localStorage, $http) {
+controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate,  $cordovaDialogs, $localStorage, $http, $ionicPopup) {
 
   $scope.doReject = function() {
     isfromlike = false;
@@ -113,7 +118,7 @@ controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate
 
   $scope.doLike = function(index) {
    isfromlike = true;
-   LikeOpponent($scope, $localStorage, $http, cards2[index].id);
+   LikeOpponent($scope, $localStorage, $http, cards2[index].id, $ionicPopup);
    var card = $ionicSwipeCardDelegate.getSwipeableCard($scope);
    card.swipe();
   //  alert(cards2[index].id);
@@ -186,16 +191,29 @@ function RejectOpponent($scope, $localStorage, $http, partnerId){
   //      }
 }
 
-function LikeOpponent($scope, $localStorage, $http, partnerId){
+function LikeOpponent($scope, $localStorage, $http, partnerId, $ionicPopup){
     //    if(localStorage.getItem("token") !== null && localStorage.getItem("token") !== ""){
           var idFb = localStorage.getItem("idFb");
           var  like_api = base_api_url + 'api/v1/findmatch/like?fbid=' + idFb + '&partnerId=' +partnerId ;
 
          $http.get(like_api, _configHeader).then(function (res){
              $scope.response = res.data;
-            alert(JSON.stringify(res.data));
+            //alert(JSON.stringify(res.data.match));
+            if (res.data.match){
+              showAlert();
+            }
          }, function(error){
              alert (JSON.stringify(error));
          });
+
+         var showAlert = function() {
+            var alertPopup = $ionicPopup.alert({
+               title: 'Match',
+               template: 'you are match',
+            });
+            alertPopup.then(function(res) {
+               console.log('mantaf');
+            });
+         };
       //  }
 }
