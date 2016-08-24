@@ -15,8 +15,8 @@
           <img ng-src="{{card.image}}">
         </div>
         <div class="button-bar">
-          <button class="button button-clear button-positive" ng-click="doAnything()">Reject</button>
-          <button class="button button-clear button-positive" ng-click="doAnything()">Like</button>
+          <button class="button button-clear button-positive" ng-click="doReject()">Reject</button>
+          <button class="button button-clear button-positive" ng-click="doLike($index)">Like</button>
         </div>
       </div>
     </swipe-card>

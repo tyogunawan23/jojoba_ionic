@@ -26,28 +26,27 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
   $scope.cards = [];
 
 
+
    $scope.addCard = function(id, img, name) {
        var newCard = {id: id, image: img, title: name};
       //  newCard.id = Math.random();
        $scope.cards.push(newCard);
+       cards2.push(newCard);
    };
 
    $scope.addCards = function(count) {
-    // alert(base_api_url + api/v1/findmatch);
-    alert('add with pagination ' + countTotal);
     var urlGet = base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +countTotal ;
-    // alert(JSON.stringify(urlParams));
-    // alert(urlGet);
      $http.get(urlGet, _configHeader).then(function(value) {
     //  alert(JSON.stringify(value.data.data))
         $scope.cards.splice(0, $scope.cards.length);
+         cards2.splice(0, cards2.length);
        angular.forEach(value.data.data, function (v) {
          $scope.addCard(v.fbid, v.url_photo, v.name);
        });
        $scope.showCards = true;
+       isfromlike = false;
      }, function(error){
-        // alert (JSON.stringify(error));
-    //     alert (error);
+        alert (JSON.stringify(error));
      });
    };
 
@@ -55,19 +54,20 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
 
    $scope.cardSwiped = function(index) {
     // $scope.addCards(countTotal);
-  //  countTotal+=20;
-    //alert(countTotal);
+
 
    };
 
    $scope.cardDestroyed = function(index) {
      $scope.cards.pop();
-//     alert('hai' + $scope.cards.length);
-    //  countTotal+=20;
-      if ($scope.cards.length === 1 ){
-        //  alert('cek this');
-          countTotal+=10;
-          //alert('hai' + countTotal);
+     //var card = $scope.cards[index];
+        if (isfromlike){
+        //   alert('isfromlike true ya');
+        } else {
+             RejectOpponent($scope, $localStorage, $http, cards2[index].id);
+        }
+
+      if ($scope.cards.length === 0  ){
          $scope.addCards(countTotal);
       }
 
@@ -102,10 +102,21 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
 });
 
 
-controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate,  $cordovaDialogs) {
-  $scope.doAnything = function() {
+controllerModule.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate,  $cordovaDialogs, $localStorage, $http) {
+
+  $scope.doReject = function() {
+    isfromlike = false;
     var card = $ionicSwipeCardDelegate.getSwipeableCard($scope);
     card.swipe();
+
+  };
+
+  $scope.doLike = function(index) {
+   isfromlike = true;
+   LikeOpponent($scope, $localStorage, $http, cards2[index].id);
+   var card = $ionicSwipeCardDelegate.getSwipeableCard($scope);
+   card.swipe();
+  //  alert(cards2[index].id);
   };
 
 });
@@ -151,14 +162,40 @@ function postData($scope, $localStorage, $http){
           var data = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionme, loc:myloc};
         //  alert(JSON.stringify(data));
           var  update_api = base_api_url + 'api/v1/update';
-        //  alert(update_api);
-
-         $http.post(update_api, data, _configHeader).then(function (res){
+          $http.post(update_api, data, _configHeader).then(function (res){
              $scope.response = res.data;
-            alert(JSON.stringify(res.data));
+        //    alert(JSON.stringify(res.data));
          }, function(error){
-          alert (JSON.stringify(error));
+           alert (JSON.stringify(error));
          });
 
         }
+}
+
+function RejectOpponent($scope, $localStorage, $http, partnerId){
+      //  if(localStorage.getItem("token") !== null && localStorage.getItem("token") !== ""){
+          var idFb = localStorage.getItem("idFb");
+          var  reject_api = base_api_url + 'api/v1/findmatch/reject?fbid=' + idFb + '&partnerId=' +partnerId ;
+
+         $http.get(reject_api, _configHeader).then(function (res){
+             $scope.response = res.data;
+        //     alert(JSON.stringify(res.data));
+         }, function(error){
+             alert (JSON.stringify(error));
+         });
+  //      }
+}
+
+function LikeOpponent($scope, $localStorage, $http, partnerId){
+    //    if(localStorage.getItem("token") !== null && localStorage.getItem("token") !== ""){
+          var idFb = localStorage.getItem("idFb");
+          var  like_api = base_api_url + 'api/v1/findmatch/like?fbid=' + idFb + '&partnerId=' +partnerId ;
+
+         $http.get(like_api, _configHeader).then(function (res){
+             $scope.response = res.data;
+            alert(JSON.stringify(res.data));
+         }, function(error){
+             alert (JSON.stringify(error));
+         });
+      //  }
 }

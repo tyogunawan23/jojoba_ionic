@@ -9,6 +9,8 @@ var _configHeader = {
              'Content-Type': 'application/json; charset=utf-8'
            }
 };
+var cards2 =[];
+var isfromlike = false ;
 
 
 controllerModule.controller("AppCtrl", function($scope, $state, $cordovaOauth, $localStorage){
