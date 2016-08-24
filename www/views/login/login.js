@@ -30,8 +30,6 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
        var genderFb = result.data.gender;
        var pictureFb= picture.data.url;
        var religionmeFb = "";
-       var latFb = "";
-       var longFb = "";
        var birthdayFb = $filter('date')(new Date(birthday), "yyyy-MM-dd");
 
        localStorage.setItem("idFb", idFb);
@@ -40,9 +38,11 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
        localStorage.setItem("pictureFb",  pictureFb);
        localStorage.setItem("birthdayFb", birthdayFb);
        //alert(JSON.stringify(result.data));
-       var datalogin = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb, lat :latFb,long : longFb};
+       //var datalogin = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb, lat :latFb,long : longFb};
 
-       login(datalogin, $http, access_token, $rootScope, $filter,  $localStorage,  $state);
+       var datalogin2 = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb};
+       alert(JSON.stringify(datalogin2));
+       login(datalogin2, $http, access_token, $rootScope, $filter,  $localStorage,  $state);
 
   }, function(error) {
       alert("There was a problem getting your profile.  Check the logs for details.");
@@ -50,12 +50,15 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
   });
 }
 
-function login (datalogin, $http, access_token, $rootScope, $filter,  $localStorage,  $state) {
-  alert(JSON.stringify(datalogin));
+function login (datalogin2, $http, access_token, $rootScope, $filter,  $localStorage,  $state) {
+//  alert('pos');
    var login_api = base_api_url + 'api/v1/login';
-     $http.post(login_api, datalogin).then(function (res){
+     $http.post(login_api, datalogin2).then(function (res){
      localStorage.setItem("token_auth", res.data.token);
      alert(JSON.stringify(res.data));
-     $state.go('religion'); $state.go('religion');
+     $state.go('religion');
+   }, function(error){
+       alert (JSON.stringify(error));
+       alert (error);
    });
 }

@@ -1,11 +1,8 @@
 <ion-view view-title="Setting">
 
-
-
   <ion-content class="padding">
 
-
-    <h4>Gender </h4>
+      <div class="item item-divider">Gender :</div>
     <ion-list>
 
       <ion-checkbox ng-model="filter.red">Male</ion-checkbox>
@@ -15,7 +12,7 @@
     </ion-list>
 
     <br>
-    <h4>Years old</h4>
+    <div class="item item-divider">Age :</div>
     <div class="list">
       <div class="item range range-positive">
         <i class="icon ion-ios-sunny-outline"></i>
@@ -27,9 +24,19 @@
       </div>
     </div>
 
-    <button class="button button-block button-positive" ng-click="setting()">
-        Save
-    </button>
+        <div class="item item-divider">Age:</div>
+        <div class="item range range-positive">
+          <div class="range-label">{{range.from}}</div>
+          <ui-multi-range ng-step="1" ng-min="ageMin" ng-max="ageMax" ng-model-min="range.from" ng-model-max="range.to" ng-change-min="somethingHasChanged()" ng-change-max="somethingHasChanged()"></ui-multi-range>
+          <div class="range-label">{{range.to}}</div>
+        </div>
+        <p>
+        <button class="button button-balanced" ng-click="printRange()">Log range</button>
+        </p>
+
+      <button class="button button-block button-positive" ng-click="setting()">
+          Save
+      </button>
 
 
   </ion-content>

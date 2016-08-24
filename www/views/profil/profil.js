@@ -3,7 +3,7 @@ controllerModule.controller("profil", function($scope, $http, $localStorage, $lo
        if($localStorage.hasOwnProperty("accessToken") === true) {
            $http.get("https://graph.facebook.com/v2.2/me", { params: { access_token: localStorage.getItem("token"), fields: "id,name,gender,birthday,location,website,picture,relationship_status", format: "json" }}).then(function(result) {
                $scope.profileData = result.data;
-               alert(JSON.stringify(result.data));
+        //       alert(JSON.stringify(result.data));
            }, function(error) {
                alert("There was a problem getting your profile.  Check the logs for details.");
                console.log(error);
@@ -13,4 +13,6 @@ controllerModule.controller("profil", function($scope, $http, $localStorage, $lo
            $location.path("/login");
        }
    };
+
+   $scope.auth_token = localStorage.getItem("token_auth");
 });
