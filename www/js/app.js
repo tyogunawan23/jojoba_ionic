@@ -144,6 +144,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
     })
 
+    .state('app.detailpeople', {
+      url: '/detailpeople?id',
+      views: {
+        'menuContent': {
+          templateUrl: 'views/detailpeople/detailpeople.html',
+          controller: "PeopleDetailCtrl"
+        }
+      }
+
+    })
+
     .state('app.setting', {
       url: '/setting',
       views: {

@@ -1,4 +1,5 @@
-controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDelegate, $cordovaGeolocation, $ionicHistory,  $cordovaGeolocation,$rootScope, $localStorage, $ionicLoading){
+controllerModule.controller("home", function($scope, $state,$http, $ionicSwipeCardDelegate, $cordovaGeolocation, $ionicHistory,
+   $cordovaGeolocation,$rootScope, $localStorage, $ionicLoading, DataUser){
 
   var countTotal = 10 ;
 
@@ -61,6 +62,12 @@ controllerModule.controller("home", function($scope, $http, $ionicSwipeCardDeleg
     // $scope.addCards(countTotal);
 
 
+   };
+
+   $scope.toDetail = function(index){
+    // alert(cards2[index].id);
+    DataUser.setUser(cards2[index]);
+    $state.go('app.detailpeople', {result: index});
    };
 
    $scope.cardDestroyed = function(index) {

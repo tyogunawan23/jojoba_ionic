@@ -24,6 +24,18 @@ angular.module('starter.services', [])
     }
 })
 
+.factory('DataUser', function () {
+var user = {};
+return {
+    getUser: function () {
+        return user;
+    },
+    setUser: function (userparameter) {
+        user = userparameter;
+    }
+};
+})
+
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 

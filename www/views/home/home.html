@@ -1,4 +1,4 @@
-<ion-view view-title="Cari Jodoh">
+<ion-view view-title="Jojoba">
 
   <ion-content class="padding"  id="content-home">
 
@@ -11,7 +11,7 @@
         <div class="title">
           {{card.title}}
         </div>
-        <div class="image">
+        <div class="image" ng-click="toDetail($index)">
           <img ng-src="{{card.image}}">
         </div>
         <div class="button-bar">
