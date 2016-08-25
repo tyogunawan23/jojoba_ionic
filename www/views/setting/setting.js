@@ -20,7 +20,6 @@ function MultiRangeDirective ($compile) {
 
     return directive;
 
-    ////////////////////
 
     function link ($scope, $element, $attrs) {
         var min, max, step, $inputMin = angular.element('<input type="range">'), $inputMax;
