@@ -2,42 +2,83 @@ controllerModule.controller('people', function ($scope) {
 
 })
 
-controllerModule.controller('CardsCtrl', function ($scope, $http, $ionicLoading, $ionicSideMenuDelegate, TDCardDelegate) {
+controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicLoading, $ionicSideMenuDelegate, TDCardDelegate, $localStorage, $ionicPopup, DataUser) {
   console.log('CARDS CTRL');
   $ionicSideMenuDelegate.canDragContent(false);
+
   var cardTypes = [];
+  var idFb = localStorage.getItem("idFb");
+
   $ionicLoading.show();
-  $http.get('https://randomuser.me/api/?results=5').success(function (response) {
-    angular.forEach(response.results, function (famous) {
-      cardTypes.push(famous);
-      //console.log(JSON.stringify(famous));
+  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+    angular.forEach(response.data, function (famous) {
+       $scope.addCard(famous);
     });
     $ionicLoading.hide();
   }).error(function (err) {
     console.log(err);
+    alert(err)
   });
 
-  //$scope.cards = Array.prototype.slice.call(cardTypes, 0);
   $scope.cards = cardTypes;
 
   $scope.cardDestroyed = function(index) {
-    $scope.cards.splice(index, 1);
+    if ($scope.cards.length === 0  ){
+      $ionicLoading.show();
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+        angular.forEach(response.data, function (famous) {
+           $scope.addCard(famous);
+        });
+        $ionicLoading.hide();
+      }).error(function (err) {
+        console.log(err);
+        alert(err)
+      });
+    }
   };
 
-  $scope.addCard = function() {
-    var newCard = cardTypes[Math.floor(Math.random() * cardTypes.length)];
-    newCard.id = Math.random();
-    $scope.cards.push(angular.extend({}, newCard));
+  $scope.addCard = function(famous) {
+    cardTypes.push(famous);
   }
 
-  $scope.yesCard = function() {
+  $scope.yesCard = function(index) {
     console.log('YES');
-    $scope.addCard();
+    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name);
+      if ($scope.cards.length === 1  ){
+        $ionicLoading.show();
+        $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+          //  alert(JSON.stringify(response.data))
+          angular.forEach(response.data, function (famous) {
+            //alert(JSON.stringify(famous))
+             $scope.addCard(famous);
+            //console.log(JSON.stringify(famous));
+          });
+          $ionicLoading.hide();
+        }).error(function (err) {
+          console.log(err);
+          alert(err)
+        });
+      }
+
+
   };
 
-  $scope.noCard = function() {
+  $scope.noCard = function(index) {
     console.log('NO');
-    $scope.addCard();
+     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid);
+    if ($scope.cards.length === 1  ){
+      $ionicLoading.show();
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+        angular.forEach(response.data, function (famous) {
+           $scope.addCard(famous);
+        });
+        $ionicLoading.hide();
+      }).error(function (err) {
+        console.log(err);
+        alert(err)
+      });
+    }
+
   };
 
   $scope.toggleLeft = function() {
@@ -46,10 +87,53 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $ionicLoading,
 
   $scope.cardSwipedLeft = function(index) {
     console.log('LEFT SWIPE');
-    $scope.addCard();
+     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid);
   };
   $scope.cardSwipedRight = function(index) {
     console.log('RIGHT SWIPE');
-    $scope.addCard();
+    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name);
   };
+
+  $scope.toDetail = function(index){
+   DataUser.setUser(cardTypes[index]);
+   $state.go('app.detailpeople', {result: index});
+  };
+
 })
+
+
+function RejectOpponent($scope, $localStorage, $http, partnerId){
+          var idFb = localStorage.getItem("idFb");
+          var  reject_api = base_api_url + 'api/v1/findmatch/reject?fbid=' + idFb + '&partnerId=' +partnerId ;
+
+         $http.get(reject_api, _configHeader).then(function (res){
+             $scope.response = res.data;
+             $scope.cards.pop();
+         }, function(error){
+             alert (JSON.stringify(error));
+         });
+}
+
+function LikeOpponent($scope, $localStorage, $http, partnerId, $ionicPopup, name){
+          var idFb = localStorage.getItem("idFb");
+          var  like_api = base_api_url + 'api/v1/findmatch/like?fbid=' + idFb + '&partnerId=' +partnerId ;
+
+         $http.get(like_api, _configHeader).then(function (res){
+             $scope.response = res.data;
+             $scope.cards.pop();
+            if (res.data.match){
+              showAlert();
+            }
+         }, function(error){
+             alert (JSON.stringify(error));
+         });
+         var showAlert = function() {
+            var alertPopup = $ionicPopup.alert({
+               title: 'Match',
+               template: 'you are match with ' + name,
+            });
+            alertPopup.then(function(res) {
+               console.log('mantaf');
+            });
+         };
+}

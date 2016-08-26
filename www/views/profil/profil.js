@@ -6,6 +6,7 @@ controllerModule.controller("profil", function($scope, $http, $localStorage, $lo
         //       alert(JSON.stringify(result.data));
            }, function(error) {
                alert("There was a problem getting your profile.  Check the logs for details.");
+               alert(JSON.stringify(error));
                console.log(error);
            });
        } else {

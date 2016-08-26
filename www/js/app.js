@@ -13,7 +13,7 @@ myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $locati
        $ionicHistory.nextViewOptions({
           historyRoot: true
         });
-        $state.go('app.home');
+        $state.go('app.people');
         $window.location.reload(true);
      }
 

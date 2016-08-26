@@ -43,7 +43,7 @@ controllerModule.controller("home", function($scope, $state,$http, $ionicSwipeCa
    $scope.addCards = function(count) {
     var urlGet = base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +countTotal ;
      $http.get(urlGet, _configHeader).then(function(value) {
-    //  alert(JSON.stringify(value.data.data))
+      //  alert(JSON.stringify(value.data.data))
         $scope.cards.splice(0, $scope.cards.length);
          cards2.splice(0, cards2.length);
        angular.forEach(value.data.data, function (v) {

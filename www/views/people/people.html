@@ -1,4 +1,4 @@
-<ion-view view-title="Chemistry">
+<ion-view view-title="Jojoba">
   <!-- <ion-nav-title>
     <div class="padding">
       <img height="30px" src="img/logo.png">
@@ -9,15 +9,15 @@
     <td-card id="td-card" ng-repeat="card in cards" on-destroy="cardDestroyed($index)"
         on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)"
         on-partial-swipe="cardPartialSwipe(amt)">
-      <div class="image">
+      <div class="image" ng-click="toDetail($index)">
         <div class="yes-text overlayBox"><div class="yesBox boxed" id="centerMe">Yes</div></div>
         <div class="no-text overlayBox"><div class="noBox boxed">No</div></div>
-        <img ng-src="{{card.picture.medium}}">
+        <img ng-src="{{card.url_photo}}">
       </div>
       <div class="buttondesc">
-        <div class="username"><i class="icon ion-android-contact"></i> {{card.login.username}}</div>
-        <button ng-click="noCard()" class="button button-assertive">No</button>
-        <button ng-click="yesCard()" class="button button-balanced">Yes</button>
+        <div class="username"><i class="icon ion-android-contact"></i> {{card.name}}</div>
+        <button ng-click="noCard($index)" class="button button-assertive">Reject</button>
+        <button ng-click="yesCard($index)" class="button button-balanced">Like  </button>
       </div>
     </td-card>
   </td-cards>

@@ -1,12 +1,13 @@
-<ion-view title="{{user.title}}" ng-init="init()">
+<ion-view title="{{user.name}}" ng-init="init()">
     <ion-content>
         <div class="list card">
           <div class="item">
-              <h2>{{user.title}}</h2>
-              <p>{{user.id}}</p>
+              <h2>{{user.name}}</h2>
+              <p>{{user.age}}</p>
+              <p>{{user.religion}}</p>
           </div>
           <div class="item item-image">
-              <img ng-src={{user.image}} />
+              <img ng-src={{user.url_photo}} />
           </div>
         </div>
     </ion-content>
