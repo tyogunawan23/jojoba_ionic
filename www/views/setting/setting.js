@@ -72,18 +72,21 @@ function MultiRangeDirective ($compile) {
 }
 
 
-controllerModule.controller("setting", function(){
-
+controllerModule.controller("setting", function($scope, $localStorage){
+   $scope.gender =  localStorage.getItem("oppositeGender") ;
+   $scope.newValue = function(gender) {
+     localStorage.setItem("oppositeGender", gender);
+   }
 
 });
 
 controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCtrl", function($scope, $timeout){
 
-      $scope.ageMin = 18;
-      $scope.ageMax = 42;
+      $scope.ageMin = 17;
+      $scope.ageMax = 80;
       $scope.range = {
-        from: 30,
-        to: 40
+        from: 17,
+        to: 80
       };
 
      $scope.somethingHasChanged = function () {

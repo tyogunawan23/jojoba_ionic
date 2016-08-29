@@ -4,8 +4,8 @@
 
       <div class="item item-divider">Gender</div>
       <ion-list>
-            <ion-radio ng-model="gender" ng-value="'male'">Male</ion-radio>
-            <ion-radio ng-model="gender" ng-value="'female'">Female</ion-radio>
+            <ion-radio ng-model="gender" ng-value="'male'" ng-change='newValue(gender)'>Male</ion-radio>
+            <ion-radio ng-model="gender" ng-value="'female'" ng-change='newValue(gender)'>Female</ion-radio>
     </ion-list>
 
     <br>

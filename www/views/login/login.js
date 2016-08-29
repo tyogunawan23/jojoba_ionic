@@ -24,12 +24,13 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
     //  $scope.profileData = result.data;
       var picture = result.data.picture;
       var birthday = result.data.birthday;
+      var oppositeGender = 'female';
 
        var idFb = result.data.id;
        var nameFb = result.data.name;
        var genderFb = result.data.gender;
       // var pictureFb= picture.data.url;
-       var pictureFb = 'https://graph.facebook.com/' + idFb '/picture?width=400&height=400';
+       var pictureFb = 'https://graph.facebook.com/' + idFb + '/picture?width=400&height=400';
        var religionmeFb = "";
        var birthdayFb = $filter('date')(new Date(birthday), "yyyy-MM-dd");
 
@@ -38,6 +39,14 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
        localStorage.setItem("genderFb", genderFb);
        localStorage.setItem("pictureFb",  pictureFb);
        localStorage.setItem("birthdayFb", birthdayFb);
+
+       if (genderFb == 'female') {
+         oppositeGender = 'male';
+       } else {
+          oppositeGender = 'female'
+       }
+
+       localStorage.setItem("oppositeGender", oppositeGender);
        //alert(JSON.stringify(result.data));
        //var datalogin = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb, lat :latFb,long : longFb};
 

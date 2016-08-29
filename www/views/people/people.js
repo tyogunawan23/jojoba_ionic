@@ -4,6 +4,15 @@ controllerModule.controller('people', function ($scope) {
 
 controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicLoading, $ionicSideMenuDelegate, TDCardDelegate, $localStorage, $ionicPopup, DataUser,  $cordovaGeolocation,$rootScope) {
   console.log('CARDS CTRL');
+
+  var _configHeader = {
+         headers: {
+               'Authorization': localStorage.getItem("token_auth"),
+               'Accept': 'application/json; charset=utf-8',
+               'Content-Type': 'application/json; charset=utf-8'
+             }
+  };
+
   $ionicSideMenuDelegate.canDragContent(false);
 
   var cardTypes = [];
@@ -17,6 +26,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   var religionpartner = localStorage.getItem("religionpartner");
   var lat = localStorage.getItem("lat");
   var long = localStorage.getItem("long");
+  var oppositeGender = localStorage.getItem("oppositeGender");
 
   $ionicLoading.show();
 
@@ -27,9 +37,11 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
       throw e; // rethrow to not marked as handled
   }
 
+//alert(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender);
 
-  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner, _configHeader).success(function (response) {
+  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender, _configHeader).success(function (response) {
     angular.forEach(response.data, function (famous) {
+
        $scope.addCard(famous);
     });
     $ionicLoading.hide();
@@ -175,7 +187,7 @@ function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $ht
               //$ionicLoading.hide();
          });
   postData($scope, $localStorage, $http);
-//  $ionicLoading.hide();
+  //$ionicLoading.hide();
 };
 
 };
