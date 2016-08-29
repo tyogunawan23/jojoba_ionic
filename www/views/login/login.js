@@ -41,7 +41,7 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
        //var datalogin = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb, lat :latFb,long : longFb};
 
        var datalogin2 = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionmeFb};
-       alert(JSON.stringify(datalogin2));
+    //   alert(JSON.stringify(datalogin2));
        login(datalogin2, $http, access_token, $rootScope, $filter,  $localStorage,  $state);
 
   }, function(error) {
@@ -55,7 +55,7 @@ function login (datalogin2, $http, access_token, $rootScope, $filter,  $localSto
    var login_api = base_api_url + 'api/v1/login';
      $http.post(login_api, datalogin2).then(function (res){
      localStorage.setItem("token_auth", res.data.token);
-     alert(JSON.stringify(res.data));
+  //   alert(JSON.stringify(res.data));
      $state.go('religion');
    }, function(error){
        alert (JSON.stringify(error));

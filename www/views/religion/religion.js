@@ -13,6 +13,6 @@ controllerModule.controller("navigateReligionPartner", function($scope, $state, 
   //  alert(religion.partner);
    $rootScope.religionpartner = religion.partner;
     localStorage.setItem("religionpartner", $rootScope.religionpartner);
-    $state.go('app.home');
+    $state.go('app.people');
   }
 });

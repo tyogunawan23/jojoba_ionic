@@ -18,23 +18,28 @@
     </header>
     <ion-content id="content-menu">
       <ion-list>
-        <ion-item menu-close href="#/app/profil">
-          Profil
+        <ion-item item-type="item-icon-left" nav-clear menu-close href="#/app/profil">
+            <i class="icon ion-person"></i>
+            Profil
         </ion-item>
-        <ion-item menu-close href="#/app/people">
-          Find Match
+        <ion-item item-type="item-icon-left" nav-clear menu-close href="#/app/people">
+            <i class="icon ion-radio-waves"></i>
+            Find Match
         </ion-item>
-        <ion-item menu-close href="#/app/chat">
-          Match
+        <ion-item item-type="item-icon-left" nav-clear menu-close href="#/app/chat">
+            <i class="icon ion-person"></i>
+              Match
         </ion-item>
-        <ion-item menu-close href="#/app/setting">
-          Setting
+        <ion-item item-type="item-icon-left" nav-clear menu-close href="#/app/setting">
+            <i class="icon ion-unlocked"></i>
+              Setting
         </ion-item>
-        <ion-item menu-close ng-click="about()">
+        <!-- <ion-item menu-close ng-click="about()">
           About
-        </ion-item>
-        <ion-item menu-close ng-click="logout()">
-          Logout
+        </ion-item> -->
+        <ion-item item-type="item-icon-left" nav-clear menu-close ng-click="logout()">
+            <i class="icon ion-log-out"></i>
+            Logout
         </ion-item>
       </ion-list>
     </ion-content>
