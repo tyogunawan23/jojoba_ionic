@@ -72,7 +72,12 @@ function MultiRangeDirective ($compile) {
 }
 
 
-controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("setting", function($scope, $timeout){
+controllerModule.controller("setting", function(){
+
+
+});
+
+controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCtrl", function($scope, $timeout){
 
       $scope.ageMin = 18;
       $scope.ageMax = 42;

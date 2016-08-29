@@ -3,26 +3,21 @@
   <ion-content class="padding">
 
       <div class="item item-divider">Gender</div>
-    <ion-list>
-
-      <ion-checkbox ng-model="filter.red">Male</ion-checkbox>
-      <ion-checkbox ng-model="filter.yellow">Female</ion-checkbox>
-
-
+      <ion-list>
+            <ion-radio ng-model="gender" ng-value="'male'">Male</ion-radio>
+            <ion-radio ng-model="gender" ng-value="'female'">Female</ion-radio>
     </ion-list>
 
     <br>
-    <!-- <div class="item item-divider">Age</div>
+    <div class="item item-divider">Distance :  {{rangeValue}} km </div>
     <div class="list">
       <div class="item range range-positive">
-        <i class="icon ion-ios-sunny-outline"></i>
+         <div>0</div>
         <input type="range" name="volume" min="0" max="100" ng-model="rangeValue" ng-change="drag(rangeValue)">
-
-        <i class="icon ion-ios-sunny"></i>
-
-         <div> Years : {{rangeValue}}</div>
+          <div>100</div>
       </div>
-    </div> -->
+    </div>
+    <div class="list" ng-controller="MyCtrl">
 
         <div class="item item-divider">Age</div>
         <div class="item range range-positive">
@@ -30,13 +25,14 @@
           <ui-multi-range ng-step="1" ng-min="ageMin" ng-max="ageMax" ng-model-min="range.from" ng-model-max="range.to" ng-change-min="somethingHasChanged()" ng-change-max="somethingHasChanged()"></ui-multi-range>
           <div class="range-label">{{range.to}}</div>
         </div>
-        <p>
+    </div>
+        <!-- <p>
         <button class="button button-balanced" ng-click="printRange()">Log range</button>
-        </p>
+        </p> -->
 
-      <button class="button button-block button-positive" ng-click="setting()">
+      <!-- <button class="button button-block button-positive" ng-click="setting()">
           Save
-      </button>
+      </button> -->
 
 
   </ion-content>

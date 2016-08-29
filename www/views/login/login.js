@@ -28,7 +28,8 @@ function saveDataFacebook($http, access_token, $rootScope, $filter,  $localStora
        var idFb = result.data.id;
        var nameFb = result.data.name;
        var genderFb = result.data.gender;
-       var pictureFb= picture.data.url;
+      // var pictureFb= picture.data.url;
+       var pictureFb = 'https://graph.facebook.com/' + idFb '/picture?width=400&height=400';
        var religionmeFb = "";
        var birthdayFb = $filter('date')(new Date(birthday), "yyyy-MM-dd");
 
