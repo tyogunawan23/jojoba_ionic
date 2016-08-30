@@ -36,6 +36,37 @@ return {
 };
 })
 
+.factory('ChatService', function ($http) {
+var chats = {};
+return {
+    getUserMatch: function (fbid) {
+      return $http.get(base_api_url + 'api/v1/findmatch/match?fbid=' + fbid, _configHeader).then(function(response){
+      chats = response;
+      return chats;
+    }, function(error){
+        return error ;
+				//something went wrong!
+				//Optionally, we can just: return error;
+			});
+		},
+
+    unMatch: function (fbid, partnerId) {
+      return $http.get(base_api_url + 'api/v1/findmatch/unmatch?fbid=' + fbid + '&partnerId=' +partnerId, _configHeader).then(function(response){
+    //   chats.splice(chats.indexOf(chat), 1);
+    //  chats = response;
+      return response;
+    }, function(error){
+        return error ;
+				//something went wrong!
+				//Optionally, we can just: return error;
+			});
+		},
+    setUser: function (userparameter) {
+        user = userparameter;
+    }
+};
+})
+
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 

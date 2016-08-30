@@ -1,19 +1,23 @@
-<ion-view view-title="Chat">
+<ion-view view-title="Match" cache-view="false">
 
 
 
   <ion-content class="padding">
 
+    <!-- <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+    </ion-refresher> -->
 
       <ion-list>
-        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/app/chat/{{chat.id}}">
-          <img ng-src="{{chat.face}}">
-          <h2>{{chat.name}}</h2>
-          <p>{{chat.lastText}}</p>
+        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="match in matchs" type="item-text-wrap" href="#/app/chat/{{match.fbid}}">
+          <img ng-src="{{match.url_photo}}">
+          <h2>{{match.name}}</h2>
+          <p>{{match.age}}</p>
           <i class="icon ion-chevron-right icon-accessory"></i>
 
-          <ion-option-button class="button-assertive" ng-click="remove(chat)">
-            Delete
+          <ion-option-button class="button-assertive" ng-click="remove(match)">
+            unmatch
           </ion-option-button>
         </ion-item>
       </ion-list>

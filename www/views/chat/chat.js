@@ -1,10 +1,62 @@
 
 
-controllerModule.controller("chat", function($scope, Chats){
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+controllerModule.controller("chat", function($scope, Chats, ChatService, $localStorage, $ionicLoading, $http){
+   var idFb = localStorage.getItem("idFb");
+
+    var matchCard = [];
+    $scope.matchs = [];
+
+   $scope.show = function() {
+       $scope.loading = $ionicLoading.show({
+           content: 'Loading...'
+       });
+   };
+   $scope.hide = function(){
+       $scope.loading.hide();
+   };
+
+   function loadFeed() {
+     $scope.show();
+     ChatService.getUserMatch(idFb).then(function(callback){
+    //
+    //      angular.forEach(callback.data.data, function (data) {
+    //        //alert(JSON.stringify(famous))
+    // //       matchCard.splice(0,matchCard.length);
+    //       //  while (matchCard.length) { matchCard.pop(); }
+    //   //     matchCard.push(data);
+    //   matchCard = data;
+    //        //console.log(JSON.stringify(famous));
+    //      });
+
+         $scope.matchs = callback.data.data ;
+         console.log(JSON.stringify(callback));
+         $scope.hide();
+      // $scope.$broadcast('scroll.refreshComplete');
+    },function(error){
+         alert(JSON.stringify(error));
+         $scope.hide();
+    });
+   }
+
+//   $scope.doRefresh = loadFeed;
+
+   loadFeed();
+
+  $scope.remove = function(match) {
+      $scope.show();
+    ChatService.unMatch(idFb, match.fbid).then(function(callback){
+  //    matchCard.splice(0,matchCard.length);
+      $scope.matchs.splice($scope.matchs.indexOf(match), 1);
+    //    loadFeed();
+        $scope.hide();
+   },function(error){
+        alert(JSON.stringify(error));
+        $scope.hide();
+   });
+
   };
+
+   $scope.matchs = matchCard ;
 
 });
 

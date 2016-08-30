@@ -80,23 +80,28 @@ controllerModule.controller("setting", function($scope, $localStorage){
 
 });
 
-controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCtrl", function($scope, $timeout){
+controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCtrl", function($scope, $timeout, $localStorage){
 
-      $scope.ageMin = 17;
-      $scope.ageMax = 80;
+      $scope.ageMin = 10;
+      $scope.ageMax = 60;
       $scope.range = {
-        from: 17,
-        to: 80
+        from: localStorage.getItem("rangeFrom"),
+        to: localStorage.getItem("rangeTo")
       };
 
      $scope.somethingHasChanged = function () {
-       console.log('change!', $scope.range);
+       console.log('change!', $scope.range.from);
+
+       localStorage.setItem("rangeFrom", $scope.range.from);
+       localStorage.setItem("rangeTo", $scope.range.to);
+       localStorage.setItem("yearsRange", $scope.range.from + '-' + $scope.range.to);
+
      };
 
     $scope.printRange = function () {
       $timeout(function () {
-      console.log('range =', $scope.range);
-      })
+      console.log('range =', $scope.range.from);
+    }, 2000)
     }
 
     $scope.drag = function(value) {

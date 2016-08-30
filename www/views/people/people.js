@@ -16,6 +16,9 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   $ionicSideMenuDelegate.canDragContent(false);
 
   var cardTypes = [];
+  var lat = -6.1766242 ;
+  var long = 106.79148149999999 ;
+  var rangeAge = 0-100;
   var idFb = localStorage.getItem("idFb");
   var idFb = localStorage.getItem("idFb");
   var nameFb = localStorage.getItem("nameFb");
@@ -24,22 +27,25 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   var genderFb = localStorage.getItem("genderFb");
   var religionme = localStorage.getItem("religionme");
   var religionpartner = localStorage.getItem("religionpartner");
-  var lat = localStorage.getItem("lat");
-  var long = localStorage.getItem("long");
+  lat = localStorage.getItem("lat");
+  long = localStorage.getItem("long");
   var oppositeGender = localStorage.getItem("oppositeGender");
+  if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+    rangeAge = localStorage.getItem("yearsRange");
+  }
+
 
   $ionicLoading.show();
 
   try {
-      getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
+     getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
   } catch (e) {
       console.log("Got an error!",e);
       throw e; // rethrow to not marked as handled
   }
 
-//alert(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender);
-
-  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender, _configHeader).success(function (response) {
+//alert(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge);
+  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
     angular.forEach(response.data, function (famous) {
 
        $scope.addCard(famous);
@@ -47,7 +53,8 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     $ionicLoading.hide();
   }).error(function (err) {
     console.log(err);
-    alert(err)
+    alert(JSON.stringify(err))
+    $ionicLoading.hide();
   });
 
   $scope.cards = cardTypes;
@@ -55,7 +62,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   $scope.cardDestroyed = function(index) {
     if ($scope.cards.length === 0  ){
       $ionicLoading.show();
-      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
         angular.forEach(response.data, function (famous) {
            $scope.addCard(famous);
         });
@@ -76,7 +83,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name);
       if ($scope.cards.length === 1  ){
         $ionicLoading.show();
-        $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+        $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
           //  alert(JSON.stringify(response.data))
           angular.forEach(response.data, function (famous) {
             //alert(JSON.stringify(famous))
@@ -98,7 +105,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
      RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid);
     if ($scope.cards.length === 1  ){
       $ionicLoading.show();
-      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10, _configHeader).success(function (response) {
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
         angular.forEach(response.data, function (famous) {
            $scope.addCard(famous);
         });
@@ -194,6 +201,14 @@ function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $ht
 
 function postData($scope, $localStorage, $http){
       //  alert('pos with auth' + localStorage.getItem("token_auth"));
+        var _configHeader = {
+               headers: {
+                     'Authorization': localStorage.getItem("token_auth"),
+                     'Accept': 'application/json; charset=utf-8',
+                     'Content-Type': 'application/json; charset=utf-8'
+                   }
+        };
+
         if(localStorage.getItem("token") !== null && localStorage.getItem("token") !== ""){
           var lat = -6.1766242 ;
           var long = 106.79148149999999 ;
@@ -203,17 +218,20 @@ function postData($scope, $localStorage, $http){
           var birthdayFb = localStorage.getItem("birthdayFb");
           var genderFb = localStorage.getItem("genderFb");
           var religionme = localStorage.getItem("religionme");
-          lat = localStorage.getItem("lat");
-          long = localStorage.getItem("long");
+          if(localStorage.getItem("lat") !== null && localStorage.getItem("lat") !== ""){
+            lat = localStorage.getItem("lat");
+            long = localStorage.getItem("long");
+          }
+
           var myloc = lat + "," + long;
           var data = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionme, loc:myloc};
-          // alert(JSON.stringify(data));
+        //  alert("post data : " + JSON.stringify(data));
           var  update_api = base_api_url + 'api/v1/update';
           $http.post(update_api, data, _configHeader).then(function (res){
              $scope.response = res.data;
         //   alert(JSON.stringify(res.data));
          }, function(error){
-           alert (JSON.stringify(error));
+            alert ("response eror : " + JSON.stringify(error));
          });
 
         }
