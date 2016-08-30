@@ -4,13 +4,9 @@
 
   <ion-content class="padding">
 
-    <!-- <ion-refresher
-            pulling-text="Pull to refresh..."
-            on-refresh="doRefresh()">
-    </ion-refresher> -->
 
       <ion-list>
-        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="match in matchs" type="item-text-wrap" href="#/app/chat/{{match.fbid}}">
+        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="match in matchs" type="item-text-wrap" ng-click="toDetail($index)">
           <img ng-src="{{match.url_photo}}">
           <h2>{{match.name}}</h2>
           <p>{{match.age}}</p>

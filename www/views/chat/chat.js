@@ -1,7 +1,5 @@
-
-
-controllerModule.controller("chat", function($scope, Chats, ChatService, $localStorage, $ionicLoading, $http){
-   var idFb = localStorage.getItem("idFb");
+controllerModule.controller("chat", function($scope, Chats, ChatService, $localStorage, $ionicLoading, $http, DataUser, $state){
+    var idFb = localStorage.getItem("idFb");
 
     var matchCard = [];
     $scope.matchs = [];
@@ -18,50 +16,38 @@ controllerModule.controller("chat", function($scope, Chats, ChatService, $localS
    function loadFeed() {
      $scope.show();
      ChatService.getUserMatch(idFb).then(function(callback){
-    //
-    //      angular.forEach(callback.data.data, function (data) {
-    //        //alert(JSON.stringify(famous))
-    // //       matchCard.splice(0,matchCard.length);
-    //       //  while (matchCard.length) { matchCard.pop(); }
-    //   //     matchCard.push(data);
-    //   matchCard = data;
-    //        //console.log(JSON.stringify(famous));
-    //      });
-
          $scope.matchs = callback.data.data ;
          console.log(JSON.stringify(callback));
          $scope.hide();
-      // $scope.$broadcast('scroll.refreshComplete');
     },function(error){
          alert(JSON.stringify(error));
          $scope.hide();
     });
    }
 
-//   $scope.doRefresh = loadFeed;
-
    loadFeed();
 
   $scope.remove = function(match) {
       $scope.show();
     ChatService.unMatch(idFb, match.fbid).then(function(callback){
-  //    matchCard.splice(0,matchCard.length);
       $scope.matchs.splice($scope.matchs.indexOf(match), 1);
-    //    loadFeed();
         $scope.hide();
    },function(error){
         alert(JSON.stringify(error));
         $scope.hide();
    });
-
   };
-
    $scope.matchs = matchCard ;
+
+   $scope.toDetail = function(index){
+    DataUser.setUser( $scope.matchs[index]);
+    $state.go('app.chat-detail', {result: index});
+   };
 
 });
 
-controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, $timeout, $ionicScrollDelegate) {
-  $scope.chat = Chats.get($stateParams.chatId);
+controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, $timeout, $ionicScrollDelegate, DataUser) {
+  $scope.chat = DataUser.getUser();
 
 });
 
