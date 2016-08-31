@@ -36,8 +36,15 @@ return {
 };
 })
 
-.factory('ChatService', function ($http) {
+.factory('ChatService', function ($http, $localStorage) {
 var chats = {};
+var _configHeader = {
+       headers: {
+             'Authorization': localStorage.getItem("token_auth"),
+             'Accept': 'application/json; charset=utf-8',
+             'Content-Type': 'application/json; charset=utf-8'
+           }
+};
 return {
     getUserMatch: function (fbid) {
       return $http.get(base_api_url + 'api/v1/findmatch/match?fbid=' + fbid, _configHeader).then(function(response){

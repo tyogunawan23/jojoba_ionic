@@ -2,6 +2,25 @@ controllerModule.controller('people', function ($scope) {
 
 })
 
+var cardTypes = [];
+var lat = -6.1766242 ;
+var long = 106.79148149999999 ;
+var rangeAge = 0-100;
+var idFb = localStorage.getItem("idFb");
+var idFb = localStorage.getItem("idFb");
+var nameFb = localStorage.getItem("nameFb");
+var pictureFb = localStorage.getItem("pictureFb");
+var birthdayFb = localStorage.getItem("birthdayFb");
+var genderFb = localStorage.getItem("genderFb");
+var religionme = localStorage.getItem("religionme");
+var religionpartner = localStorage.getItem("religionpartner");
+lat = localStorage.getItem("lat");
+long = localStorage.getItem("long");
+var oppositeGender = localStorage.getItem("oppositeGender");
+if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+  rangeAge = localStorage.getItem("yearsRange");
+}
+
 controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicLoading, $ionicSideMenuDelegate, TDCardDelegate, $localStorage, $ionicPopup, DataUser,  $cordovaGeolocation,$rootScope) {
   console.log('CARDS CTRL');
 
@@ -34,6 +53,16 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     rangeAge = localStorage.getItem("yearsRange");
   }
 
+    cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
+    //    alert("Location is " + (enabled ? "enabled" : "disabled"));
+        if (enabled){
+
+        } else {
+          alert("Please enable location");
+        }
+    }, function(error) {
+        alert("Please enable location");
+    });
 
   $ionicLoading.show();
 
@@ -45,22 +74,25 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   }
 
 //alert(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge);
-  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
-    angular.forEach(response.data, function (famous) {
-
-       $scope.addCard(famous);
-    });
-    $ionicLoading.hide();
-  }).error(function (err) {
-    console.log(err);
-    alert(JSON.stringify(err))
-    $ionicLoading.hide();
-  });
+  // $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+  //   angular.forEach(response.data, function (famous) {
+  //
+  //      $scope.addCard(famous);
+  //   });
+  //   alert('finish execute');
+  //   $ionicLoading.hide();
+  // }).error(function (err) {
+  //   console.log(err);
+  //   alert(JSON.stringify(err))
+  //   $ionicLoading.hide();
+  // });
 
   $scope.cards = cardTypes;
 
   $scope.cardDestroyed = function(index) {
-    if ($scope.cards.length === 0  ){
+
+    if ($scope.cards.length === 1  ){
+    //    alert('get data');
       $ionicLoading.show();
       $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
         angular.forEach(response.data, function (famous) {
@@ -80,11 +112,14 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
 
   $scope.yesCard = function(index) {
     console.log('YES');
-    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name);
+    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name, $ionicLoading);
       if ($scope.cards.length === 1  ){
         $ionicLoading.show();
         $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
           //  alert(JSON.stringify(response.data))
+          if (response.status == 204) {
+            alert('User not found');
+          }
           angular.forEach(response.data, function (famous) {
             //alert(JSON.stringify(famous))
              $scope.addCard(famous);
@@ -102,10 +137,13 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
 
   $scope.noCard = function(index) {
     console.log('NO');
-     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid);
+     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicLoading);
     if ($scope.cards.length === 1  ){
       $ionicLoading.show();
       $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+        if (response.status == 204) {
+          alert('User not found');
+        }
         angular.forEach(response.data, function (famous) {
            $scope.addCard(famous);
         });
@@ -124,11 +162,11 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
 
   $scope.cardSwipedLeft = function(index) {
     console.log('LEFT SWIPE');
-     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid);
+     RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicLoading);
   };
   $scope.cardSwipedRight = function(index) {
     console.log('RIGHT SWIPE');
-    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name);
+    LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name, $ionicLoading);
   };
 
   $scope.toDetail = function(index){
@@ -139,29 +177,54 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
 })
 
 
-function RejectOpponent($scope, $localStorage, $http, partnerId){
+function RejectOpponent($scope, $localStorage, $http, partnerId, $ionicLoading){
           var idFb = localStorage.getItem("idFb");
           var  reject_api = base_api_url + 'api/v1/findmatch/reject?fbid=' + idFb + '&partnerId=' +partnerId ;
 
+          var _configHeader = {
+                 headers: {
+                       'Authorization': localStorage.getItem("token_auth"),
+                       'Accept': 'application/json; charset=utf-8',
+                       'Content-Type': 'application/json; charset=utf-8'
+                     }
+          };
+
+         $ionicLoading.show();
          $http.get(reject_api, _configHeader).then(function (res){
+        //   alert(JSON.stringify(res))
              $scope.response = res.data;
              $scope.cards.pop();
+            $ionicLoading.hide()
          }, function(error){
              alert (JSON.stringify(error));
+               $ionicLoading.hide()
          });
 }
 
-function LikeOpponent($scope, $localStorage, $http, partnerId, $ionicPopup, name){
+function LikeOpponent($scope, $localStorage, $http, partnerId, $ionicPopup, name, $ionicLoading){
           var idFb = localStorage.getItem("idFb");
           var  like_api = base_api_url + 'api/v1/findmatch/like?fbid=' + idFb + '&partnerId=' +partnerId;
 
+          var _configHeader = {
+                 headers: {
+                       'Authorization': localStorage.getItem("token_auth"),
+                       'Accept': 'application/json; charset=utf-8',
+                       'Content-Type': 'application/json; charset=utf-8'
+                     }
+          };
+
+          $ionicLoading.show();
+
          $http.get(like_api, _configHeader).then(function (res){
+
              $scope.response = res.data;
              $scope.cards.pop();
+             $ionicLoading.hide();
             if (res.data.match){
               showAlert();
             }
          }, function(error){
+            $ionicLoading.hide();
              alert (JSON.stringify(error));
          });
          var showAlert = function() {
@@ -177,7 +240,7 @@ function LikeOpponent($scope, $localStorage, $http, partnerId, $ionicPopup, name
 
 function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading){
  var enablelocation;
- var posOptions = {timeout: 11000, enableHighAccuracy: false};
+ var posOptions = {timeout: 15000, enableHighAccuracy: false};
  if (enablelocation = true){
    $cordovaGeolocation.getCurrentPosition(posOptions)
          .then(function(position){
@@ -187,20 +250,70 @@ function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $ht
              localStorage.setItem("long", long);
              console.log('lat', lat);
              console.log('long', long);
-          //   alert (lat + ','+ long);
+          // alert (lat + ','+ long);
+             postData($scope, $localStorage, $http, $ionicLoading);
             // $ionicLoading.hide();
          }, function(error){
+
+      //      alert(JSON.stringify(error));
+           if(localStorage.getItem("lat") !== null && localStorage.getItem("lat") !== ""){
+                postData($scope, $localStorage, $http, $ionicLoading);
+           }
+
              console.log('error:', error);
+
               //$ionicLoading.hide();
          });
-  postData($scope, $localStorage, $http);
+
   //$ionicLoading.hide();
 };
 
 };
 
-function postData($scope, $localStorage, $http){
-      //  alert('pos with auth' + localStorage.getItem("token_auth"));
+function loadData($http, $ionicLoading, $scope){
+  var lat = -6.1766242 ;
+  var long = 106.79148149999999 ;
+  var rangeAge = 0-100;
+  var idFb = localStorage.getItem("idFb");
+  var idFb = localStorage.getItem("idFb");
+  var nameFb = localStorage.getItem("nameFb");
+  var pictureFb = localStorage.getItem("pictureFb");
+  var birthdayFb = localStorage.getItem("birthdayFb");
+  var genderFb = localStorage.getItem("genderFb");
+  var religionme = localStorage.getItem("religionme");
+  var religionpartner = localStorage.getItem("religionpartner");
+  lat = localStorage.getItem("lat");
+  long = localStorage.getItem("long");
+  var oppositeGender = localStorage.getItem("oppositeGender");
+  if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+    rangeAge = localStorage.getItem("yearsRange");
+  }
+  var _configHeader = {
+         headers: {
+               'Authorization': localStorage.getItem("token_auth"),
+               'Accept': 'application/json; charset=utf-8',
+               'Content-Type': 'application/json; charset=utf-8'
+             }
+  };
+
+  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+    if (response.status == 204) {
+      alert('User not found');
+    }
+    angular.forEach(response.data, function (famous) {
+       $scope.addCard(famous);
+    });
+
+    $ionicLoading.hide();
+  }).error(function (err) {
+    console.log(err);
+    alert(JSON.stringify(err))
+    $ionicLoading.hide();
+  });
+};
+
+function postData($scope, $localStorage, $http, $ionicLoading){
+    // alert('pos with auth' + localStorage.getItem("token_auth"));
         var _configHeader = {
                headers: {
                      'Authorization': localStorage.getItem("token_auth"),
@@ -229,6 +342,7 @@ function postData($scope, $localStorage, $http){
           var  update_api = base_api_url + 'api/v1/update';
           $http.post(update_api, data, _configHeader).then(function (res){
              $scope.response = res.data;
+             loadData($http, $ionicLoading, $scope)
         //   alert(JSON.stringify(res.data));
          }, function(error){
             alert ("response eror : " + JSON.stringify(error));
