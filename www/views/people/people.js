@@ -331,14 +331,14 @@ function postData($scope, $localStorage, $http, $ionicLoading){
           var birthdayFb = localStorage.getItem("birthdayFb");
           var genderFb = localStorage.getItem("genderFb");
           var religionme = localStorage.getItem("religionme");
+          var tokenfirebase = localStorage.getItem("tkn_firbase");
           if(localStorage.getItem("lat") !== null && localStorage.getItem("lat") !== ""){
             lat = localStorage.getItem("lat");
             long = localStorage.getItem("long");
           }
 
           var myloc = lat + "," + long;
-          var data = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionme, loc:myloc};
-        //  alert("post data : " + JSON.stringify(data));
+          var data = {fbid : idFb, name : nameFb, url_photo : pictureFb, dob : birthdayFb, gender: genderFb, religion : religionme, loc:myloc, token_firebase: tokenfirebase};
           var  update_api = base_api_url + 'api/v1/update';
           $http.post(update_api, data, _configHeader).then(function (res){
              $scope.response = res.data;

@@ -1,4 +1,4 @@
-controllerModule.controller("chat", function($scope, Chats, ChatService, $localStorage, $ionicLoading, $http, DataUser, $state){
+controllerModule.controller("chat", function($scope, Chats, ChatService, $localStorage, $ionicLoading, $http, DataUser, $state, $firebase){
     var idFb = localStorage.getItem("idFb");
 
     var matchCard = [];
@@ -48,29 +48,61 @@ controllerModule.controller("chat", function($scope, Chats, ChatService, $localS
 
 controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, $timeout, $ionicScrollDelegate, DataUser) {
   $scope.chat = DataUser.getUser();
+  //
+  // var ref = new Firebase("https://vivid-heat-824.firebaseio.com/chat");
+  //       $scope.messages = $firebase(ref);
+  //      $scope.addMessage = function(e) {
+  //         $scope.sendMsg = function() {
+  //
+  //                $scope.messages.$add({from: $scope.name, body: $scope.msg});
+  //                $scope.msg = "";
+  //
+  //              }
+  //      }
+  //      $scope.clear = function(){
+  //        $scope.name = "";
+  //      }
+
 
 });
 
-controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollDelegate) {
+
+controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollDelegate, $firebase, Messages,  $ionicPopup) {
   $scope.hideTime = true;
 
  var alternate,
    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
+ $scope.messages = Messages;
  $scope.sendMessage = function() {
-   alternate = !alternate;
 
-   var d = new Date();
-   d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+//   alert('sending message');
+  $ionicPopup.prompt({
+    title: 'Need to get something off your chest?',
+    template: 'Let everybody know!'
+  }).then(function(res) {
+  //  alert(res);
+     $scope.messages.$add({
+       "message": res
+     }).error(function (err) {
+    //   console.log(err);
+       alert(err)
+     });
+  });
 
-   $scope.messages.push({
-     userId: alternate ? '12345' : '54321',
-     text: $scope.data.message,
-     time: d
-   });
-
-   delete $scope.data.message;
-   $ionicScrollDelegate.scrollBottom(true);
+  //  alternate = !alternate;
+   //
+  //  var d = new Date();
+  //  d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+   //
+  //  $scope.messages.push({
+  //    userId: alternate ? '12345' : '54321',
+  //    text: $scope.data.message,
+  //    time: d
+  //  });
+   //
+  //  delete $scope.data.message;
+  //  $ionicScrollDelegate.scrollBottom(true);
 
  };
 

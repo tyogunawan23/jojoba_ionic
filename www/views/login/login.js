@@ -4,6 +4,22 @@ controllerModule.controller("login", function($scope,  $cordovaOauth, $http, $st
         $cordovaOauth.facebook("100235250427366", ["email", "public_profile", "user_birthday" ]).then(function(result) {
          $localStorage.accessToken = result.access_token;
          $scope.token = result.access_token;
+
+      //  alert(JSON.stringify(result));
+      //   Need to convert expiresIn format from FB to date
+        //   var expiration_date = new Date();
+        //   expiration_date.setSeconds(expiration_date.getSeconds() + result.expiresIn);
+        //   expiration_date = expiration_date.toISOString();
+         //
+        //   var facebookAuthData = {
+        //           "id": result.userID,
+        //           "access_token": result.accessToken,
+        //           "expiration_date": expiration_date
+        //  };
+         //
+        //   alert(JSON.stringify(facebookAuthData));
+
+
          localStorage.setItem("token", $scope.token);
          saveDataFacebook($http, result.access_token, $rootScope, $filter,  $localStorage,  $state);
         }, function(error) {

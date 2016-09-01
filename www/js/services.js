@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['firebase'])
 
 .service('LoginService', function($q) {
     return {
@@ -35,6 +35,19 @@ return {
     }
 };
 })
+
+.factory('Messages', function($firebaseArray) {
+  var messagesRef = new Firebase("https://jojoba-ee503.firebaseio.com/chat");
+  return $firebaseArray(messagesRef);
+})
+
+// var FIREBASE_URI =  'https://jojoba-ee503.firebaseio.com';
+// .factory('Messages', ['$firebase', 'FIREBASE_URI', function($firebase, FIREBASE_URI) {
+//     'use strict';
+//     var ref = new Firebase(FIREBASE_URI);
+//     return  $firebase(ref).$asArray();
+// }]);
+
 
 .factory('ChatService', function ($http, $localStorage) {
 var chats = {};

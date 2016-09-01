@@ -3,12 +3,11 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards', 'ngCordova', 'ngStorage','ionic.contrib.ui.tinderCards', 'firebase']);
+var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards', 'ngCordova', 'ngStorage','ionic.contrib.ui.tinderCards', 'firebase', 'ionic.cloud']);
 
-myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $location) {
+myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $location, $ionicPush) {
 
   $ionicPlatform.ready(function() {
-
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -28,23 +27,46 @@ myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $locati
       $ionicHistory.nextViewOptions({
          historyRoot: true
        });
-      $state.go('app.people');
-  //    $window.location.reload(true);
-    }
+        $state.go('app.people');
+      } else {
+          $state.go('login');
+      }
 
     if (window.cordova) {
-      // alert('tes');
-      //   cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
-      //       alert("Location is " + (enabled ? "enabled" : "disabled"));
-      //   }, function(error) {
-      //       alert("The following error occurred: " + error);
-      //   });
+      $ionicPush.register().then(function(t) {
+        return $ionicPush.saveToken(t);
+      }).then(function(t) {
+        console.log('Token saved:', t.token);
+        localStorage.setItem('tkn_firbase', t.token);
+      },function(error){
+         alert(JSON.stringify(error));
+      });
+
     }
 
   });
 });
 
-myApp.config(function($stateProvider, $urlRouterProvider) {
+myApp.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider) {
+
+  $ionicCloudProvider.init({
+     "core": {
+         "app_id": "9b16707f"
+     },
+
+     "push": {
+          "sender_id": "399255501419",
+          "pluginConfig": {
+            "ios": {
+              "badge": true,
+              "sound": true
+            },
+            "android": {
+              "iconColor": "#343434"
+            }
+          }
+        }
+      });
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -167,6 +189,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/');
 
 });
