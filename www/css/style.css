@@ -120,7 +120,7 @@ td-card .buttondesc button{
 
 
 #content-home {
-  background-color: #f3f3f3;
+  background-color: #333;
   margin-top: 20px;
 }
 
@@ -218,7 +218,58 @@ swipe-card.pop-in {
   flex: $fg $fs $fb;
 }
 
-$range-default-track-bg:          #ccc !default;
+
+
+
+
+ui-multi-range {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-box-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  position: relative;
+  height: 50px;
+}
+ui-multi-range input[type=range] {
+  position: absolute;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0 2px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 1px;
+  outline: none;
+  pointer-events: none;
+}
+ui-multi-range input[type=range]:active, ui-multi-range input[type=range]:focus {
+  outline: none;
+}
+ui-multi-range input[type=range]::-webkit-slider-thumb {
+  position: relative;
+  cursor: pointer;
+  pointer-events: all;
+}
+ui-multi-range input[type=range]::-webkit-slider-thumb::before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 13px;
+  left: 100%;
+  width: 2000px;
+  height: 2px;
+}
+ui-multi-range input[type=range]:nth-child(2) {
+  background: none;
+}
+ui-multi-range input[type=range]:nth-child(2)::-webkit-slider-thumb::before {
+  background-color: #ccc;
+}
+
+
+/*$range-default-track-bg: #ccc !default;
 
 // Multi-range css
 ui-multi-range {
@@ -265,4 +316,4 @@ ui-multi-range {
             }
         }
     }
-}
+}*/

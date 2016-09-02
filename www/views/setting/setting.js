@@ -82,7 +82,7 @@ controllerModule.controller("setting", function($scope, $localStorage){
 
 controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCtrl", function($scope, $timeout, $localStorage){
       $scope.satuan = ' km';
-      $scope.ageMin = 10;
+      $scope.ageMin = 17;
       $scope.ageMax = 60;
       $scope.range = {
         from: localStorage.getItem("rangeFrom"),
