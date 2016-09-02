@@ -20,6 +20,15 @@ var oppositeGender = localStorage.getItem("oppositeGender");
 if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
   rangeAge = localStorage.getItem("yearsRange");
 }
+var religionpartner = localStorage.getItem("religionpartner");
+var distanceValue = 10000;
+var distanceData = localStorage.getItem("distancevalue");
+ if (distanceData == 100){
+   distanceValue = distanceData*10000;
+ } else {
+   distanceValue = distanceData*1000;
+ }
+
 
 controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicLoading, $ionicSideMenuDelegate, TDCardDelegate, $localStorage, $ionicPopup, DataUser,  $cordovaGeolocation,$rootScope) {
   console.log('CARDS CTRL');
@@ -53,8 +62,17 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     rangeAge = localStorage.getItem("yearsRange");
   }
 
-    cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
-    //    alert("Location is " + (enabled ? "enabled" : "disabled"));
+  var distanceValue = 10000;
+  var distanceData = localStorage.getItem("distancevalue");
+   if (distanceData == 100){
+     distanceValue = distanceData*10000;
+   } else {
+     distanceValue = distanceData*1000;
+   }
+
+  console.log('distanceValue', distanceValue);
+
+  cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
         if (enabled){
 
         } else {
@@ -64,28 +82,15 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
         alert("Please enable location");
     });
 
-  $ionicLoading.show();
-
+ $ionicLoading.show();
   try {
      getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
   } catch (e) {
       console.log("Got an error!",e);
+      alert(e);
       throw e; // rethrow to not marked as handled
   }
 
-//alert(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge);
-  // $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
-  //   angular.forEach(response.data, function (famous) {
-  //
-  //      $scope.addCard(famous);
-  //   });
-  //   alert('finish execute');
-  //   $ionicLoading.hide();
-  // }).error(function (err) {
-  //   console.log(err);
-  //   alert(JSON.stringify(err))
-  //   $ionicLoading.hide();
-  // });
 
   $scope.cards = cardTypes;
 
@@ -94,7 +99,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     if ($scope.cards.length === 1  ){
     //    alert('get data');
       $ionicLoading.show();
-      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue, _configHeader).success(function (response) {
         angular.forEach(response.data, function (famous) {
            $scope.addCard(famous);
         });
@@ -115,7 +120,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
     LikeOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicPopup, cardTypes[index].name, $ionicLoading);
       if ($scope.cards.length === 1  ){
         $ionicLoading.show();
-        $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+        $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue, _configHeader).success(function (response) {
           //  alert(JSON.stringify(response.data))
           if (response.status == 204) {
             alert('User not found');
@@ -140,7 +145,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
      RejectOpponent($scope, $localStorage, $http, cardTypes[index].fbid, $ionicLoading);
     if ($scope.cards.length === 1  ){
       $ionicLoading.show();
-      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+      $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue, _configHeader).success(function (response) {
         if (response.status == 204) {
           alert('User not found');
         }
@@ -288,6 +293,16 @@ function loadData($http, $ionicLoading, $scope){
   if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
     rangeAge = localStorage.getItem("yearsRange");
   }
+
+  var distanceValue = 10000;
+  var distanceData = localStorage.getItem("distancevalue");
+   if (distanceData == 100){
+     distanceValue = distanceData*10000;
+   } else {
+     distanceValue = distanceData*1000;
+   }
+
+
   var _configHeader = {
          headers: {
                'Authorization': localStorage.getItem("token_auth"),
@@ -295,8 +310,8 @@ function loadData($http, $ionicLoading, $scope){
                'Content-Type': 'application/json; charset=utf-8'
              }
   };
-
-  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge, _configHeader).success(function (response) {
+// alert(distanceValue)
+  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue, _configHeader).success(function (response) {
     if (response.status == 204) {
       alert('User not found');
     }
