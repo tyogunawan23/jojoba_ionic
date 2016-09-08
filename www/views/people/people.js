@@ -1,4 +1,8 @@
-controllerModule.controller('people', function ($scope) {
+controllerModule.controller('people', function ($scope, $state) {
+
+  $scope.settingmenu = function() {
+    $state.go('app.setting');
+  }
 
 })
 
@@ -261,13 +265,15 @@ function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $ht
          }, function(error){
 
       //      alert(JSON.stringify(error));
-           if(localStorage.getItem("lat") !== null && localStorage.getItem("lat") !== ""){
+
+           if(localStorage.getItem("lat") !== null || localStorage.getItem("lat") !== ""){
                 postData($scope, $localStorage, $http, $ionicLoading);
+
            }
 
              console.log('error:', error);
 
-              //$ionicLoading.hide();
+            //  $ionicLoading.hide();
          });
 
   //$ionicLoading.hide();
@@ -290,17 +296,20 @@ function loadData($http, $ionicLoading, $scope){
   lat = localStorage.getItem("lat");
   long = localStorage.getItem("long");
   var oppositeGender = localStorage.getItem("oppositeGender");
-  if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+  if(localStorage.getItem("yearsRange") !== null || localStorage.getItem("yearsRange") !== ""){
     rangeAge = localStorage.getItem("yearsRange");
   }
 
   var distanceValue = 10000;
   var distanceData = localStorage.getItem("distancevalue");
-   if (distanceData == 100){
-     distanceValue = distanceData*10000;
-   } else {
-     distanceValue = distanceData*1000;
-   }
+
+  if(localStorage.getItem("distancevalue") !== null || localStorage.getItem("distancevalue") !== ""){
+    if (distanceData == 100){
+      distanceValue = distanceData*10000;
+    } else {
+      distanceValue = distanceData*1000;
+    }
+  }
 
 
   var _configHeader = {

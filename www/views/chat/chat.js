@@ -18,9 +18,10 @@ controllerModule.controller("chat", function($scope, Chats, ChatService, $localS
      ChatService.getUserMatch(idFb).then(function(callback){
          $scope.matchs = callback.data.data ;
          console.log(JSON.stringify(callback));
+        // alert(JSON.stringify(callback));
          $scope.hide();
     },function(error){
-         alert(JSON.stringify(error));
+    //     alert(JSON.stringify(error));
          $scope.hide();
     });
    }
@@ -33,7 +34,7 @@ controllerModule.controller("chat", function($scope, Chats, ChatService, $localS
       $scope.matchs.splice($scope.matchs.indexOf(match), 1);
         $scope.hide();
    },function(error){
-        alert(JSON.stringify(error));
+      //  alert(JSON.stringify(error));
         $scope.hide();
    });
   };
@@ -46,8 +47,23 @@ controllerModule.controller("chat", function($scope, Chats, ChatService, $localS
 
 });
 
-controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, $timeout, $ionicScrollDelegate, DataUser) {
+controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, $timeout, $ionicScrollDelegate, DataUser,ChatService, $ionicLoading) {
   $scope.chat = DataUser.getUser();
+//  alert("pullMessage" + $scope.chat.roomchat)
+// $ionicLoading.show();
+//   ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+//   //  alert(JSON.stringify(callback.data.data));
+//     $scope.dataMessage = callback.data.data;
+//     $scope.messages = $scope.dataMessage
+//   alert(JSON.stringify($scope.messages));
+//   $ionicLoading.hide();
+//   //  return
+//   },function(error){
+//    alert(JSON.stringify(error));
+//    $ionicLoading.hide();
+//   //    return
+//   });
+//alert($scope.chat.roomchat);
   //
   // var ref = new Firebase("https://vivid-heat-824.firebaseio.com/chat");
   //       $scope.messages = $firebase(ref);
@@ -62,47 +78,115 @@ controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Cha
   //      $scope.clear = function(){
   //        $scope.name = "";
   //      }
-
-
 });
 
 
-controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollDelegate, $firebase, Messages,  $ionicPopup) {
+controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollDelegate, $firebase,  $ionicPopup, ChatService, $localStorage, $ionicLoading, $rootScope) {
   $scope.hideTime = true;
+
+  $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
+//    $ionicLoading.show();
+      ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+      //  alert(JSON.stringify(callback.data.data));
+        $scope.dataMessage = callback.data.data;
+        $scope.messages = $scope.dataMessage
+         $ionicScrollDelegate.scrollBottom(true);
+  //    alert(JSON.stringify($scope.messages));
+  //    $ionicLoading.hide();
+      //  return
+      },function(error){
+  //     alert(JSON.stringify(error));
+  //     $ionicLoading.hide();
+      //    return
+      });
+  });
+
+//  alert("pullMessage" + $scope.chat.roomchat)
+
+  $ionicLoading.show();
+    ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+    //  alert(JSON.stringify(callback.data.data));
+      $scope.dataMessage = callback.data.data;
+      $scope.messages = $scope.dataMessage
+       $ionicScrollDelegate.scrollBottom(true);
+//    alert(JSON.stringify($scope.messages));
+    $ionicLoading.hide();
+    //  return
+    },function(error){
+//     alert(JSON.stringify(error));
+     $ionicLoading.hide();
+    //    return
+    });
 
  var alternate,
    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
- $scope.messages = Messages;
+// $scope.messages = {};
  $scope.sendMessage = function() {
 
-//   alert('sending message');
-  $ionicPopup.prompt({
-    title: 'Need to get something off your chest?',
-    template: 'Let everybody know!'
-  }).then(function(res) {
-  //  alert(res);
-     $scope.messages.$add({
-       "message": res
-     }).error(function (err) {
-    //   console.log(err);
-       alert(err)
-     });
-  });
+// alert(JSON.stringify($scope.dataMessage));
 
-  //  alternate = !alternate;
-   //
-  //  var d = new Date();
-  //  d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-   //
-  //  $scope.messages.push({
-  //    userId: alternate ? '12345' : '54321',
-  //    text: $scope.data.message,
-  //    time: d
-  //  });
-   //
-  //  delete $scope.data.message;
-  //  $ionicScrollDelegate.scrollBottom(true);
+   if ($scope.data.message == "" || $scope.data.message == null){
+       alert('message cannot be null')
+       return
+   }
+
+var roomid = $scope.chat.roomchat;
+var fbid =  localStorage.getItem("idFb");
+var partnerId = $scope.chat.fbid;
+var messagecontent = $scope.data.message;
+
+
+ var dataMessage = {roomid : roomid, fbid : fbid, partnerid : partnerId, message : messagecontent};
+ console.log(dataMessage)
+ ChatService.sendMsg(dataMessage).then(function(callback){
+  // alert(JSON.stringify(callback));
+  // return
+  // $ionicLoading.show();
+    ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+    //  alert(JSON.stringify(callback.data.data));
+      $scope.dataMessage = callback.data.data;
+      $scope.messages = $scope.dataMessage
+//    alert(JSON.stringify($scope.messages));
+//    $ionicLoading.hide();
+    //  return
+    },function(error){
+//     alert(JSON.stringify(error));
+//     $ionicLoading.hide();
+    //    return
+    });
+
+},function(error){
+  alert(JSON.stringify(error));
+  //   return
+});
+
+
+ //alert(JSON.stringify(dataMessage));
+//  ChatService.se
+
+   alternate = !alternate;
+
+   var d = new Date();
+   d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+
+
+   $scope.messages.push({
+
+    //  {
+    //   "senderFbid": "1357087757652584",
+    //   "senderName": "Tyo Gunawan",
+    //   "senderPhoto": "https://graph.facebook.com/1357087757652584/picture?width=400&height=400",
+    //   "bodyMessage": "Hh",
+    //   "bodyTimeStamp": "2016-09-08T08:29:17.789Z"
+    // }
+     senderFbid: fbid,
+     bodyMessage: messagecontent,
+     bodyTimeStamp: d
+   });
+
+   delete $scope.data.message;
+   $ionicScrollDelegate.scrollBottom(true);
 
  };
 
@@ -126,6 +210,12 @@ controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollD
 
 
  $scope.data = {};
- $scope.myId = '12345';
- $scope.messages = [];
+ $scope.myId = localStorage.getItem("idFb");
+ //$scope.messages = [];
+
+//  alert(JSON.stringify($scope.dataMessage));
+//  $scope.messages = $scope.dataMessage
+  // alert("cek here");
+  // alert(JSON.stringify($scope.messages));
+
 });

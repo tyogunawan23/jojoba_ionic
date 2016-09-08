@@ -15,5 +15,5 @@ controllerModule.controller("profil", function($scope, $http, $localStorage, $lo
        }
    };
 
-   $scope.auth_token = localStorage.getItem("token_auth");
+   $scope.auth_token = localStorage.getItem('tkn_firbase');
 });

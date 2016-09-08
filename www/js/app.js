@@ -3,12 +3,79 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards', 'ngCordova', 'ngStorage','ionic.contrib.ui.tinderCards', 'firebase', 'ionic.cloud']);
+var myApp = angular.module('starter', ['ionic','blank.controllers', 'starter.services' ,'ngCordovaOauth','ionic.contrib.ui.cards', 'ngCordova', 'ngStorage','ionic.contrib.ui.tinderCards', 'firebase']);
+myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $location, $rootScope, $cordovaPushV5) {
 
-myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $location, $ionicPush) {
 
   $ionicPlatform.ready(function() {
 
+
+      var options = {
+       android: {
+         senderID: "399255501419"
+       },
+       ios: {
+         alert: "true",
+         badge: "true",
+         sound: "true"
+       },
+       windows: {}
+     };
+
+     // initialize
+     $cordovaPushV5.initialize(options).then(function() {
+       // start listening for new notifications
+       $cordovaPushV5.onNotification();
+       // start listening for errors
+       $cordovaPushV5.onError();
+
+       // register to get registrationId
+       $cordovaPushV5.register().then(function(registrationId) {
+         localStorage.setItem('tkn_firbase', registrationId);
+         console.log(registrationId);
+         // save `registrationId` somewhere;
+       })
+     });
+
+     // triggered every time notification received
+     $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
+       // data.message,
+       // data.title,
+       // data.count,
+       // data.sound,
+       // data.image,
+       // data.additionalData
+      // alert(JSON.stringify(data))
+     });
+
+     // triggered every time error occurs
+     $rootScope.$on('$cordovaPushV5:errorOcurred', function(event, e){
+       // e.message
+
+    //   alert(e)
+     });
+
+    //  var push = new Ionic.Push({
+    //    "onNotification": function(notification) {
+    //      alert('Received push notification!');
+    //    },
+    //    "pluginConfig": {
+    //      "android": {
+    //        "iconColor": "#0000FF"
+    //      }
+    //    }
+    //  });
+
+    //  push.on('notification', function(notification) {
+    //     console.log("notification received")
+    //   })
+
+    // $rootScope.$on('cloud:push:notification', function(event, data) {
+    //     console.log('received push');
+    //   var msg = data.message;
+    //   alert(msg.title + ': ' + msg.text);
+    //
+    //   });
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -33,40 +100,78 @@ myApp.run(function($ionicPlatform, $localStorage, $state, $ionicHistory, $locati
       }
 
     if (window.cordova) {
-      $ionicPush.register().then(function(t) {
-        return $ionicPush.saveToken(t);
-      }).then(function(t) {
-        console.log('Token saved:', t.token);
-        localStorage.setItem('tkn_firbase', t.token);
-      },function(error){
-         alert(JSON.stringify(error));
-      });
+ //      $ionicPush.register({
+ //           canShowAlert: true, //Can pushes show an alert on your screen?
+ //           canSetBadge: true, //Can pushes update app icon badges?
+ //           canPlaySound: true, //Can notifications play a sound?
+ //           canRunActionsOnWake: true, //Can run actions outside the app,
+ //           onNotification: function(notification) {
+ //             // Handle new push notifications here
+ //             console.log("notif");
+ //             alert('notif')
+ //             return true;
+ //           }
+ // }).then(function(t) {
+ //        return $ionicPush.saveToken(t);
+ //      }).then(function(t) {
+ //        console.log('Token saved:', JSON.stringify(t));
+ //        localStorage.setItem('tkn_firbase', t.token);
+ //      },function(error){
+ //         alert(JSON.stringify(error));
+ //      });
+ //
+ //      $rootScope.$on('cloud:push:notification', function(event, data) {
+ //          console.log('received push');
+ //        var msg = data.message;
+ //        alert(msg.title + ': ' + msg.text);
+ //
+ //        });
+
+        // $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
+        //     alert(JSON.stringify(data));
+        //   });
 
     }
 
+    // window.onNotification = function(e){
+    //     alert(e.event);
+    // }
+
   });
+
+  // $rootScope.$on('cloud:push:notification', function(event, data) {
+  //     console.log('received push');
+  //   var msg = data.message;
+  //   alert(msg.title + ': ' + msg.text);
+  //
+  //   });
+
+
 });
 
-myApp.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider) {
+myApp.config(function($stateProvider, $urlRouterProvider) {
 
-  $ionicCloudProvider.init({
-     "core": {
-         "app_id": "9b16707f"
-     },
-
-     "push": {
-          "sender_id": "399255501419",
-          "pluginConfig": {
-            "ios": {
-              "badge": true,
-              "sound": true
-            },
-            "android": {
-              "iconColor": "#343434"
-            }
-          }
-        }
-      });
+  // $ionicCloudProvider.init({
+  //    "core": {
+  //        "app_id": "9b16707f",
+  //        "api_key": '3d338944048a7ca4c843a21621c81342c6d587373e5be03a',
+  //        "dev_push": true
+  //    },
+  //
+  //    "push": {
+  //         "sender_id": "399255501419",
+  //         "onNotification": "notify",
+  //         "pluginConfig": {
+  //           "ios": {
+  //             "badge": true,
+  //             "sound": true
+  //           },
+  //           "android": {
+  //             "iconColor": "#343434"
+  //           }
+  //         }
+  //       }
+  //     });
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router

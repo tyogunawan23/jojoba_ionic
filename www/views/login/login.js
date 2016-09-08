@@ -1,5 +1,18 @@
 controllerModule.controller("login", function($scope,  $cordovaOauth, $http, $state, $localStorage, $location, $rootScope, $filter){
   $scope.data = {};
+
+//   var config = {
+//      apiKey: "AIzaSyBwrDJL9gNkExRb80BTgVVnGwRkvHXb-qg",
+//      authDomain: "jojoba-ee503.firebaseapp.com",
+//      databaseURL: "https://jojoba-ee503.firebaseio.com",
+//      storageBucket: "jojoba-ee503.appspot.com",
+//    };
+//    firebase.initializeApp(config);
+//
+//
+// var rootRef = firebase.database().ref();
+
+
   $scope.login = function() {
         $cordovaOauth.facebook("100235250427366", ["email", "public_profile", "user_birthday" ]).then(function(result) {
          $localStorage.accessToken = result.access_token;
@@ -18,6 +31,15 @@ controllerModule.controller("login", function($scope,  $cordovaOauth, $http, $st
         //  };
          //
         //   alert(JSON.stringify(facebookAuthData));
+
+
+      // rootRef.authWithOAuthToken("facebook", result.access_token, function(error, authData) {
+      //   if (error) {
+      //     console.log('Firebase login failed!', error);
+      //   } else {
+      //     console.log('Authenticated successfully with payload:', authData);
+      //   }
+      // });
 
 
          localStorage.setItem("token", $scope.token);

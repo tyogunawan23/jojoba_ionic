@@ -36,10 +36,10 @@ return {
 };
 })
 
-.factory('Messages', function($firebaseArray) {
-  var messagesRef = new Firebase("https://jojoba-ee503.firebaseio.com/chat");
-  return $firebaseArray(messagesRef);
-})
+// .factory('Messages', function($firebaseArray) {
+//   var messagesRef = new Firebase("https://jojoba-ee503.firebaseio.com");
+//   return $firebaseArray(messagesRef);
+// })
 
 // var FIREBASE_URI =  'https://jojoba-ee503.firebaseio.com';
 // .factory('Messages', ['$firebase', 'FIREBASE_URI', function($firebase, FIREBASE_URI) {
@@ -47,6 +47,11 @@ return {
 //     var ref = new Firebase(FIREBASE_URI);
 //     return  $firebase(ref).$asArray();
 // }]);
+
+// .factory('Messages', function($firebaseArray) {
+//   var messagesRef = new Firebase(FIREBASE_URI);
+//   return $firebaseArray(messagesRef);
+// })
 
 
 .factory('ChatService', function ($http, $localStorage) {
@@ -65,22 +70,33 @@ return {
       return chats;
     }, function(error){
         return error ;
-				//something went wrong!
-				//Optionally, we can just: return error;
 			});
 		},
 
     unMatch: function (fbid, partnerId) {
       return $http.get(base_api_url + 'api/v1/findmatch/unmatch?fbid=' + fbid + '&partnerId=' +partnerId, _configHeader).then(function(response){
-    //   chats.splice(chats.indexOf(chat), 1);
-    //  chats = response;
       return response;
     }, function(error){
         return error ;
-				//something went wrong!
-				//Optionally, we can just: return error;
 			});
 		},
+
+    sendMsg: function (body) {
+      return $http.post(base_api_url + 'api/v1/chat/send', body, _configHeader).then(function(response){
+      return response;
+    }, function(error){
+        return error ;
+			});
+		},
+
+    pullMessage: function (roomid) {
+        return $http.get(base_api_url + 'api/v1/chat/retrieve?roomid=' + roomid, _configHeader).then(function(response){
+        return response;
+      }, function(error){
+          return error ;
+        });
+    },
+
     setUser: function (userparameter) {
         user = userparameter;
     }
