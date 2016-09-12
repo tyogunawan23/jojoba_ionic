@@ -95,7 +95,7 @@ controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollD
   //    $ionicLoading.hide();
       //  return
       },function(error){
-  //     alert(JSON.stringify(error));
+       alert(JSON.stringify(error));
   //     $ionicLoading.hide();
       //    return
       });
@@ -168,7 +168,7 @@ var messagecontent = $scope.data.message;
    alternate = !alternate;
 
    var d = new Date();
-   d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+   //d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
 
 
    $scope.messages.push({

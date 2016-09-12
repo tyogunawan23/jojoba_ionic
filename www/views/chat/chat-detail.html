@@ -9,21 +9,21 @@
    <div ng-controller="Messages">
   <ion-content  class="content-stable"
                on-swipe-left="hideTime = false"
-               on-swipe-right="hideTime = true">
+               on-swipe-right="hideTime = false">
 
     <div ng-repeat="message in messages"
          ng-class="{other: message.senderFbid == myId}"
          class="messages">
 
-      <div class="message" ng-class="{'slide-right': hideTime, '': !hideTime}">
-        <span class="span-message">{{ message.bodyMessage }}</span>
+      <div class="message">
+        <span class="span-message">{{ message.bodyMessage }}<p>{{ message.bodyTimeStamp | date:'EEE, HH:mm' }}</p></span>
       </div>
 <!--
       <div class="message" ng-class="{'slide-right': hideTime, '': !hideTime}">
         <span class="span-time">{{ message.time }}</span>
       </div> -->
 
-      <div class="time" ng-class="{'slide-right': hideTime, '': !hideTime}">time here</div>
+      <!-- <div class="time" ng-class="{'slide-right': hideTime, '': !hideTime}">time here</div> -->
 
 
     </div>
