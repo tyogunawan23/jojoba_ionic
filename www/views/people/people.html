@@ -20,8 +20,10 @@
       </div>
       <div class="buttondesc">
         <div class="username"><i class="icon ion-android-contact"></i> {{card.name}}</div>
-        <button ng-click="noCard($index)" class="button button-assertive">Reject</button>
-        <button ng-click="yesCard($index)" class="button button-balanced">Like  </button>
+        <img src="img/reject.png" style="width : 30% ; height : 30%"  ng-click="noCard($index)">
+         <img src="img/love.png" style="width : 30% ; height : 30%"  ng-click="yesCard($index)">
+        <!-- <button ng-click="noCard($index)" class="button button-assertive">Reject</button>
+        <button ng-click="yesCard($index)" class="button button-balanced">Like  </button> -->
       </div>
     </td-card>
   </td-cards>

@@ -79,24 +79,45 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
 
   console.log('distanceValue', distanceValue);
 
+    function onRequestSuccess(success){
+    //  console.log("Successfully requested accuracy: "+success.message);
+      start()
+    }
+
+  function onRequestFailure(error){
+      console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+      alert("Please enable location");
+      if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+          if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+              cordova.plugins.diagnostic.switchToLocationSettings();
+          }
+      }
+  }
+
+
+
   cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
         if (enabled){
-
+            start()
         } else {
-          alert("Please enable location");
+          cordova.plugins.locationAccuracy.request(onRequestSuccess, onRequestFailure, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+        //  alert("Please enable location");
         }
     }, function(error) {
-        alert("Please enable location");
+      //  alert("Please enable location");
     });
 
- $ionicLoading.show();
-  try {
-     getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
-  } catch (e) {
-      console.log("Got an error!",e);
-      alert(e);
-      throw e; // rethrow to not marked as handled
-  }
+
+function start (){
+   $ionicLoading.show();
+    try {
+       getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $http, $ionicLoading);
+    } catch (e) {
+        console.log("Got an error!",e);
+    //    alert(e);
+        throw e; // rethrow to not marked as handled
+    }
+}
 
 
   $scope.cards = cardTypes;
@@ -208,7 +229,7 @@ function RejectOpponent($scope, $localStorage, $http, partnerId, $ionicLoading){
              $scope.cards.pop();
             $ionicLoading.hide()
          }, function(error){
-             alert (JSON.stringify(error));
+        //     alert (JSON.stringify(error));
                $ionicLoading.hide()
          });
 }
@@ -375,8 +396,8 @@ function postData($scope, $localStorage, $http, $ionicLoading){
              loadData($http, $ionicLoading, $scope)
         //   alert(JSON.stringify(res.data));
          }, function(error){
-            alert ("response eror : " + JSON.stringify(error));
-
+        //    alert ("response eror : " + JSON.stringify(error));
+            console.log(JSON.stringify(error));
          });
 
         }

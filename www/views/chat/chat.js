@@ -53,7 +53,35 @@ controllerModule.controller('ChatDetailCtrl', function($scope, $stateParams, Cha
   $scope.detailMatch = function (){
     $state.go('app.detailpeople', {result: 1});
   }
-
+//  alert("pullMessage" + $scope.chat.roomchat)
+// $ionicLoading.show();
+//   ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+//   //  alert(JSON.stringify(callback.data.data));
+//     $scope.dataMessage = callback.data.data;
+//     $scope.messages = $scope.dataMessage
+//   alert(JSON.stringify($scope.messages));
+//   $ionicLoading.hide();
+//   //  return
+//   },function(error){
+//    alert(JSON.stringify(error));
+//    $ionicLoading.hide();
+//   //    return
+//   });
+//alert($scope.chat.roomchat);
+  //
+  // var ref = new Firebase("https://vivid-heat-824.firebaseio.com/chat");
+  //       $scope.messages = $firebase(ref);
+  //      $scope.addMessage = function(e) {
+  //         $scope.sendMsg = function() {
+  //
+  //                $scope.messages.$add({from: $scope.name, body: $scope.msg});
+  //                $scope.msg = "";
+  //
+  //              }
+  //      }
+  //      $scope.clear = function(){
+  //        $scope.name = "";
+  //      }
 });
 
 
@@ -61,14 +89,23 @@ controllerModule.controller('Messages', function($scope, $timeout, $ionicScrollD
   $scope.hideTime = true;
 
   $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
+//    $ionicLoading.show();
       ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
+      //  alert(JSON.stringify(callback.data.data));
         $scope.dataMessage = callback.data.data;
         $scope.messages = $scope.dataMessage
          $ionicScrollDelegate.scrollBottom(true);
+  //    alert(JSON.stringify($scope.messages));
+  //    $ionicLoading.hide();
+      //  return
       },function(error){
        alert(JSON.stringify(error));
+  //     $ionicLoading.hide();
+      //    return
       });
   });
+
+//  alert("pullMessage" + $scope.chat.roomchat)
 
   $ionicLoading.show();
     ChatService.pullMessage($scope.chat.roomchat).then(function(callback){
@@ -139,6 +176,14 @@ var messagecontent = $scope.data.message;
 
 
    $scope.messages.push({
+
+    //  {
+    //   "senderFbid": "1357087757652584",
+    //   "senderName": "Tyo Gunawan",
+    //   "senderPhoto": "https://graph.facebook.com/1357087757652584/picture?width=400&height=400",
+    //   "bodyMessage": "Hh",
+    //   "bodyTimeStamp": "2016-09-08T08:29:17.789Z"
+    // }
      senderFbid: fbid,
      bodyMessage: messagecontent,
      bodyTimeStamp: d
@@ -170,6 +215,12 @@ var messagecontent = $scope.data.message;
 
  $scope.data = {};
  $scope.myId = localStorage.getItem("idFb");
+ //$scope.messages = [];
+
+//  alert(JSON.stringify($scope.dataMessage));
+//  $scope.messages = $scope.dataMessage
+  // alert("cek here");
+  // alert(JSON.stringify($scope.messages));
 
 });
 
