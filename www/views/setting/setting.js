@@ -92,7 +92,6 @@ controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCt
      $scope.somethingHasChanged = function () {
 
        //umur
-//       console.log('change!', $scope.range.from);
 
        localStorage.setItem("rangeFrom", $scope.range.from);
        localStorage.setItem("rangeTo", $scope.range.to);
@@ -114,9 +113,6 @@ controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCt
 
     $scope.setLevelText= function() {
         //jarak
-        // $scope.years = Math.floor(value / 12);
-        // $scope.months = value % 12;
-  //        console.log('range value has changed to :'+$scope.data.levelvalue);
           if ($scope.data.levelvalue == 100){
               $scope.satuan = '+ km';
           } else {
@@ -125,6 +121,5 @@ controllerModule.directive('uiMultiRange', MultiRangeDirective).controller("MyCt
          localStorage.setItem("distancevalue", $scope.data.levelvalue);
     };
 
-  //  $scope.rangeValue = 100;
 
 });

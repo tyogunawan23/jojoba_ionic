@@ -9,7 +9,7 @@ controllerModule.controller('people', function ($scope, $state) {
 var cardTypes = [];
 var lat = -6.1766242 ;
 var long = 106.79148149999999 ;
-var rangeAge = 0-100;
+var rangeAge = "0-100";
 var idFb = localStorage.getItem("idFb");
 var idFb = localStorage.getItem("idFb");
 var nameFb = localStorage.getItem("nameFb");
@@ -21,18 +21,19 @@ var religionpartner = localStorage.getItem("religionpartner");
 lat = localStorage.getItem("lat");
 long = localStorage.getItem("long");
 var oppositeGender = localStorage.getItem("oppositeGender");
-if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+if(localStorage.getItem("yearsRange")){
   rangeAge = localStorage.getItem("yearsRange");
 }
 var religionpartner = localStorage.getItem("religionpartner");
 var distanceValue = 10000;
 var distanceData = localStorage.getItem("distancevalue");
- if (distanceData == 100){
-   distanceValue = distanceData*10000;
- } else {
-   distanceValue = distanceData*1000;
- }
-
+if(distanceData){
+  if (distanceData == 100){
+    distanceValue = distanceData*10000;
+  } else {
+    distanceValue = distanceData*1000;
+  }
+}
 
 controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicLoading, $ionicSideMenuDelegate, TDCardDelegate, $localStorage, $ionicPopup, DataUser,  $cordovaGeolocation,$rootScope) {
   console.log('CARDS CTRL');
@@ -50,7 +51,7 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   var cardTypes = [];
   var lat = -6.1766242 ;
   var long = 106.79148149999999 ;
-  var rangeAge = 0-100;
+  var rangeAge = "0-100";
   var idFb = localStorage.getItem("idFb");
   var idFb = localStorage.getItem("idFb");
   var nameFb = localStorage.getItem("nameFb");
@@ -62,17 +63,19 @@ controllerModule.controller('CardsCtrl', function ($scope, $http, $state,$ionicL
   lat = localStorage.getItem("lat");
   long = localStorage.getItem("long");
   var oppositeGender = localStorage.getItem("oppositeGender");
-  if(localStorage.getItem("yearsRange") !== null && localStorage.getItem("yearsRange") !== ""){
+  if(localStorage.getItem("yearsRange")){
     rangeAge = localStorage.getItem("yearsRange");
   }
 
   var distanceValue = 10000;
   var distanceData = localStorage.getItem("distancevalue");
-   if (distanceData == 100){
-     distanceValue = distanceData*10000;
-   } else {
-     distanceValue = distanceData*1000;
-   }
+  if(distanceData){
+    if (distanceData == 100){
+      distanceValue = distanceData*10000;
+    } else {
+      distanceValue = distanceData*1000;
+    }
+  }
 
   console.log('distanceValue', distanceValue);
 
@@ -284,7 +287,7 @@ function getLocation ($scope, $cordovaGeolocation,$rootScope, $localStorage, $ht
 function loadData($http, $ionicLoading, $scope){
   var lat = -6.1766242 ;
   var long = 106.79148149999999 ;
-  var rangeAge = 0-100;
+  var rangeAge = "0-100";
   var idFb = localStorage.getItem("idFb");
   var idFb = localStorage.getItem("idFb");
   var nameFb = localStorage.getItem("nameFb");
@@ -296,14 +299,14 @@ function loadData($http, $ionicLoading, $scope){
   lat = localStorage.getItem("lat");
   long = localStorage.getItem("long");
   var oppositeGender = localStorage.getItem("oppositeGender");
-  if(localStorage.getItem("yearsRange") !== null || localStorage.getItem("yearsRange") !== ""){
+  if(localStorage.getItem("yearsRange")){
     rangeAge = localStorage.getItem("yearsRange");
   }
 
   var distanceValue = 10000;
   var distanceData = localStorage.getItem("distancevalue");
 
-  if(localStorage.getItem("distancevalue") !== null || localStorage.getItem("distancevalue") !== ""){
+  if(distanceData){
     if (distanceData == 100){
       distanceValue = distanceData*10000;
     } else {
@@ -319,8 +322,11 @@ function loadData($http, $ionicLoading, $scope){
                'Content-Type': 'application/json; charset=utf-8'
              }
   };
-// alert(distanceValue)
-  $http.get(base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue, _configHeader).success(function (response) {
+
+var urlLoadData = base_api_url + 'api/v1/findmatch?fbid=' + idFb + '&pagination=' +10+ '&religion=' +religionpartner+'&gender=' +oppositeGender+'&age= '+rangeAge+'&nearRadius=' +distanceValue
+
+  $http.get(urlLoadData, _configHeader).success(function (response) {
+
     if (response.status == 204) {
       alert('User not found');
     }
@@ -370,6 +376,7 @@ function postData($scope, $localStorage, $http, $ionicLoading){
         //   alert(JSON.stringify(res.data));
          }, function(error){
             alert ("response eror : " + JSON.stringify(error));
+
          });
 
         }

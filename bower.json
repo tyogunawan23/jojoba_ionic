@@ -9,6 +9,8 @@
     "ionic-ion-swipe-cards": "*",
     "ngCordova": "^0.1.27-alpha",
     "firebase": "^3.3.0",
-    "angularfire": "^2.0.2"
+    "angularfire": "^2.0.2",
+    "Autolinker.js": "^1.1.0",
+    "angular-moment": "^0.10.3"
   }
 }
